@@ -1,0 +1,5 @@
+
+new x(a, b) {};
+new name = "xFoxyyy";
+new age = 1000;
+new isBrazilliam = true;
