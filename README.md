@@ -55,7 +55,7 @@ ProtoIndigo v1.0
 ## Testing
 
 You can clone this repository and compile it yourself, or use the pre-built executable via your CLI.
-[Download the executable here!]()
+[Download the executable here!](https://github.com/ipxzfoxy/protoindigo/blob/main/indigo.exe)
 
 ### Using the CLI:
 
