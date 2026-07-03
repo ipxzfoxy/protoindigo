@@ -1,10 +1,10 @@
 x64/
 Debug/
 .vs/
-.git/
 Breeze waVE/
 bw/
 Breeze waVE.slnx/
-Breeze waVE.vcxproj
-Breeze waVE.vcxproj.filters
-Breeze waVE.vcxproj.user
+Breeze waVE.vcxproj/
+Breeze waVE.vcxproj.filters/
+Breeze waVE.vcxproj.user/
+Breeze waVE.slnx/
