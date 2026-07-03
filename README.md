@@ -2,39 +2,75 @@
 
 A small programming language project currently in testing and active development.
 
+ProtoIndigo v1.0
+
 ## Current Features
 
 - Variable declaration
+- Constants declaration
+- Function declaration
+- Typing
 - Basic syntax parsing
 - Syntax error reporting
+- Undefined identifier error reporting
 
 ## Supported Types
 
-- Boolean (`true` / `false`)
-- String (`"hello"`)
-- Integer Number
+- **Boolean:** `true` / `false`
+- **String:** `"helloworld"`
+- **Integer:** Whole numbers
 
-## Example
+## Simple Example
 
-```txt
-new name = "Victor";
+```bre
+	proto "Hello World!";
+	new name = "ProtoIndigo";
 
-new age = 90;
-
-new is_developer = false;
-
+	proto name;
 ```
 
-# Test
+## Advanced Example
 
-If you want to test the interpreter, write your code inside /tests/index.indigo.
+```bre
+	new name = "xFoxyyy";
+	new is_Developer = true;
 
-# Notes
+	new #string description = "This is my first time using the ProtoIndigo!";
 
-The parser can return syntax errors during code analysis.
+	new const age = 100;
+	new const #number a = 3;
 
-This project is still experimental and under development.
+	new f(a, b) {
+	
+	};
 
-# Developer
+	new const footer = "Bruh, I can't create functions in ProtoIndigo yet...";
 
-Developed by Victor Botelho Anunciação (xFoxyyy0).
+	proto name;
+	proto "Hello World by ProtoIndigo!";
+
+	proto age;
+```
+
+## Testing
+
+You can clone this repository and compile it yourself, or use the pre-built executable via your CLI.
+[Download the executable here!]()
+
+### Using the CLI:
+
+```powershell
+	./indigo.exe index.bre
+```
+
+* The first argument must be the path to the file you want to interpret.
+* The file **must** have the `.bre` extension.
+
+## Notes
+
+- The parser may terminate the process if it encounters any syntax errors.
+- Function declaration is supported by the parser, but functions cannot yet execute code inside their scope or be called.
+
+## Developer
+
+Developed by **Victor Botelho Anunciação** (xFoxyyy0).

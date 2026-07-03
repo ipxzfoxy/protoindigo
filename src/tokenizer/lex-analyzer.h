@@ -42,13 +42,17 @@ namespace indigo::internal {
 
         Token nextToken();
 
+        Token typing();
+
+        
+
     };
 
     class Lexer {
         LexAttributes attr;
         LexFunctions func;
     public:
-        std::string getSrc();
+        const std::string getSrc();
         Lexer(std::string_view source) : attr(source), func(attr) {};
         Token next();
     };

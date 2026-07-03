@@ -1,29 +1,32 @@
 #pragma once
-#include "../tokenizer/lex-analyzer.h"
+#include "../tokenizer/lex-analyzer.h" 
+#include "../types.h"
+#include "./nodes/variable.h"
+#include "./nodes/functions.h"
+#include "./nodes/proto.h"
+
 #include <memory>
-#include <iostream>
 #include <vector>
-#include <string>
+#include <optional>
+#include <iostream>
+
 
 namespace indigo::internal {
 	namespace parser {
-
-		class Node {
-		public:
-			virtual ~Node() = default;
-		};
-
 		class Parser {
 			Lexer lex;
 			Token ctk;
 			std::vector<std::unique_ptr<Node>> ast;
- 
+			
+			
 			void consume();
-			void literalAdv(std::string identifier);
+			void protoAdv();
+			void varAdv(bool isConst, std::string, std::string identifier);
 			void functionAdv(std::string identifier);
 			void analyzer(TokenType et);
 			
 		public:
+			const std::vector<std::unique_ptr<Node>>& getAST() const;
 			Parser(Lexer& lex);
 			void parse();
 		};

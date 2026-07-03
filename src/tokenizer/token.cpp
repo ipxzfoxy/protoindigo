@@ -6,7 +6,7 @@ namespace indigo::internal {
        {"can", TokenType::CAN},
        {"deny", TokenType::DENY},
        {"new", TokenType::NEW},
-       {"lock", TokenType::LOCK},
+       {"const", TokenType::CONST},
        {"var", TokenType::VAR},
        {"class", TokenType::CLASS},
        {"struct", TokenType::STRUCT},
@@ -23,6 +23,7 @@ namespace indigo::internal {
        {"type", TokenType::TYPE},
        {"true", TokenType::BOOLEAN},
        {"false", TokenType::BOOLEAN},
+       {"proto", TokenType::PROTO},
     };
 
     const std::unordered_map<std::string, TokenType> symbols_operators = {

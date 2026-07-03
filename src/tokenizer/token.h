@@ -1,23 +1,22 @@
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <string_view>
 
 namespace indigo::internal {
+    // RESERVED
     enum class TokenType {
         // Keywords
-        USE, CAN, DENY, NEW, LOCK, VAR, CLASS,
+        USE, CAN, DENY, NEW, CONST, VAR, CLASS,
         STRUCT, IF, ELSE, FOR, CONTINUE, RETURN, BREAK,
-        IMPORT, EXPORT, SELF, ENUM, TYPE,
+        IMPORT, EXPORT, SELF, ENUM, TYPE, PROTO,
 
-        // Identifiers & literals
-        IDENTIFIER,
+        // Special
+        IDENTIFIER, T_EOF, TYPING,
 
         // Symbols
         EQUAL, LPAREN, RPAREN, LBRACE, RBRACE, LT, GT, COLON, SEMICOLON,
         HASH, PLUS, MINUS, STAR, SLASH, DOT, COMMA,
-
-        // Special
-        T_EOF,
 
         // Literal
         STRING, NUMBER, T_NULL, BOOLEAN

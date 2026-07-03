@@ -60,6 +60,18 @@ namespace indigo::internal {
         return Token(TokenType::STRING, res);
     }
 
+    Token LexFunctions::typing() {
+        std::string res;
+        move_adv();
+
+        while (attr.current != '\0' && std::isalnum(attr.current)) {
+            res += attr.current;
+            move_adv();
+        }
+
+        return Token(TokenType::TYPING, res);
+    }
+
     Token LexFunctions::symbol_operator() {
         std::string res;
         while (attr.current != '\0' && std::ispunct(attr.current)) {
@@ -71,6 +83,7 @@ namespace indigo::internal {
         return Token(TokenType::T_NULL, res);
     }
 
+
     Token LexFunctions::nextToken() {
         ignore_ws();
         if (attr.current == '\0') return Token(TokenType::T_EOF, "");
@@ -79,13 +92,15 @@ namespace indigo::internal {
             move_adv();
             return string();
         }
+        if (attr.current == '#') return typing();
         if (std::isdigit(attr.current)) return number();
         if (std::ispunct(attr.current)) return symbol_operator();
+        
         move_adv();
         return Token(TokenType::T_NULL, "");
     }
 
-    std::string Lexer::getSrc() {
+    const std::string Lexer::getSrc() {
         return attr.src;
     }
 

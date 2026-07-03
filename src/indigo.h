@@ -1,5 +1,4 @@
-#include "tokenizer/lex-analyzer.h"
-#include "parsing/parser.h"
+#include "ast/Interpreter.h"
 
 #pragma once
 
