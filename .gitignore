@@ -1,9 +1,29 @@
+# =========================
+# Build outputs (C++ / Visual Studio)
+# =========================
 x64/
 Debug/
-.vs/
-Breeze waVE/
+Release/
 bw/
-Breeze waVE.slnx
-Breeze waVE.vcxproj
-Breeze waVE.vcxproj.filters
-Breeze waVE.vcxproj.user
+Breeze waVE/
+
+.vs/
+
+# =========================
+# Solution / project files
+# =========================
+*.slnx
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+*.obj
+*.log
+*.tlog
+*.ilk
+*.pdb
+*.idb
+*.ipdb
+*.cache
+
+.git/
