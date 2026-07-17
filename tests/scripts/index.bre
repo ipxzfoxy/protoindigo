@@ -1,0 +1,16 @@
+new name = "xFoxyyy";
+new is_Developer = true;
+
+new #string description = "This is my first time using the ProtoIndigo!";
+
+new const age = 100;
+new const #number a = 3;
+
+new f(a, b) {
+	
+};
+
+new const footer = "Bruh, I can't create functions in ProtoIndigo yet...";
+
+proto name;
+proto "Hello World!";
