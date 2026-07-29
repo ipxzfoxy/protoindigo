@@ -8,16 +8,20 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
             name: linux
+            exe_path: build/indigo
 
           - os: windows-latest
             name: windows
+            exe_path: build/Release/indigo.exe
 
           - os: macos-latest
             name: macos
+            exe_path: build/indigo
 
     runs-on: ${{ matrix.os }}
 
@@ -29,7 +33,7 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: Configure project
-        run: cmake -B build
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build project
         run: cmake --build build --config Release
@@ -37,12 +41,16 @@ jobs:
       - name: Package binary
         shell: bash
         run: |
-          mkdir package
-
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            cp build/Release/indigo.exe package/indigo.exe
+          mkdir -p package
+          if [ -f "${{ matrix.exe_path }}" ]; then
+            cp ${{ matrix.exe_path }} package/
+          elif [ -f "build/indigo.exe" ]; then
+            cp build/indigo.exe package/
+          elif [ -f "build/indigo" ]; then
+            cp build/indigo package/
           else
-            cp build/Release/indigo package/indigo
+            echo "Binary not found!"
+            exit 1
           fi
 
       - name: Upload artifact
@@ -51,10 +59,11 @@ jobs:
           name: indigo-${{ matrix.name }}
           path: package/
 
-
   release:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Download artifacts
@@ -106,7 +115,6 @@ jobs:
             - Windows x64
             - Linux x64
             - macOS x64
-
           files: |
             indigo-linux/*
             indigo-windows/*
