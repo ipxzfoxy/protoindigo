@@ -1,0 +1,7 @@
+new d1 = "Hello World"
+new d2 = 'Hello World'
+new d3 = `Hello World`
+
+proto d1
+proto d2
+proto d3

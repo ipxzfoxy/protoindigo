@@ -1,0 +1,11 @@
+version "1.0.0"
+
+cmd "test" do "mkbre protoindigo-test.exe"
+
+target_builder "cmake"
+
+execute "cmake --build build"
+
+cache "enabled"
+
+debug "enabled"

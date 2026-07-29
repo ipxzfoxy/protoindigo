@@ -1,0 +1,7 @@
+new #string name = "Birzy";
+new const #string description = "abc123";
+now #string subtitle = "The best";
+
+proto name;
+proto description;
+proto subtitle;

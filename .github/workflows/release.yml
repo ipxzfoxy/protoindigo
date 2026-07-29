@@ -1,0 +1,113 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: linux
+
+          - os: windows-latest
+            name: windows
+
+          - os: macos-latest
+            name: macos
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Configure project
+        run: cmake -B build
+
+      - name: Build project
+        run: cmake --build build --config Release
+
+      - name: Package binary
+        shell: bash
+        run: |
+          mkdir package
+
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            cp build/Release/indigo.exe package/indigo.exe
+          else
+            cp build/Release/indigo package/indigo
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: indigo-${{ matrix.name }}
+          path: package/
+
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ProtoIndigo 2.0.0
+          body: |
+            # ProtoIndigo 2.0.0
+
+            Welcome to ProtoIndigo 2!
+
+            ProtoIndigo is now getting closer to becoming a usable programming language. Now, you can perform mathematical operations, variable reassignments, and take advantage of the maximum performance of the new BreVM virtual machine.
+
+            ## What's new
+
+            - Added Virtual Machine (BreVM)
+            - Added Bytecode Compilation
+            - Removed the classic interpreter
+            - Added new expression Nodes
+            - Added variable reassignment
+            - Added Mathematical Expressions
+            - Removed the requirement of using `;` at the end of every line
+            - Added a new syntax for creating constants: `now a = 10`, which does not replace `new const a = 10`, but provides a less verbose alternative
+            - Added new keyword `now`
+            - Added new string delimiters: `"HelloWorld!"`, `` `HelloWorld!` ``, `'HelloWorld!'`
+            - Reorganized internal structure
+            - Redesigned Tokenizer
+            - Redesigned Parser
+            - Added new internal utilities for development
+            - Added CLI command: `indigo compile <file>`
+            - Added CLI command: `indigo platform`
+            - Added CLI command: `indigo --tokenize <file>`
+            - Added CLI command: `indigo --parse <file>`
+            - Unexpected tokens are now prohibited
+            - Added new Nodes and expressions
+            - Added Runtime Operation - A class responsible for managing all interpreter components
+            - Several internal optimizations to improve execution speed
+            - Initial Embedding - ProtoIndigo is beginning to become embeddable into C++ applications
+            - Exclusive build tool for the interpreter currently under development
+            - Automatic `.bre` file detection, allowing execution without specifying the extension. Example: `indigo run tests/scripts/noextension` executes `noextension.bre`.
+
+            ## Downloads
+
+            Available builds:
+
+            - Windows x64
+            - Linux x64
+            - macOS x64
+
+          files: |
+            indigo-linux/*
+            indigo-windows/*
+            indigo-macos/*

@@ -1,0 +1,2 @@
+new #string incomplete = "x" + "y" + "z"
+new #string complete = "Proto Indigo
