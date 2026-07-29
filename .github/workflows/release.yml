@@ -14,14 +14,17 @@ jobs:
           - os: ubuntu-latest
             name: linux
             exe_path: build/indigo
+            artifact_name: indigo-linux
 
           - os: windows-latest
             name: windows
             exe_path: build/Release/indigo.exe
+            artifact_name: indigo-windows.exe
 
           - os: macos-latest
             name: macos
             exe_path: build/indigo
+            artifact_name: indigo-macos
 
     runs-on: ${{ matrix.os }}
 
@@ -43,11 +46,11 @@ jobs:
         run: |
           mkdir -p package
           if [ -f "${{ matrix.exe_path }}" ]; then
-            cp ${{ matrix.exe_path }} package/
+            cp ${{ matrix.exe_path }} package/${{ matrix.artifact_name }}
           elif [ -f "build/indigo.exe" ]; then
-            cp build/indigo.exe package/
+            cp build/indigo.exe package/${{ matrix.artifact_name }}
           elif [ -f "build/indigo" ]; then
-            cp build/indigo package/
+            cp build/indigo package/${{ matrix.artifact_name }}
           else
             echo "Binary not found!"
             exit 1
@@ -59,8 +62,36 @@ jobs:
           name: indigo-${{ matrix.name }}
           path: package/
 
+  build-wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Emscripten
+        uses: mymindstorm/setup-emsdk@v14
+
+      - name: Configure and Build WebAssembly
+        run: |
+          mkdir -p build-wasm
+          cd build-wasm
+          emcmake cmake .. -DCMAKE_BUILD_TYPE=Release
+          emmake make
+
+      - name: Package WebAssembly
+        run: |
+          mkdir -p package-wasm
+          cp build-wasm/indigo.js package-wasm/ 2>/dev/null || true
+          cp build-wasm/indigo.wasm package-wasm/ 2>/dev/null || true
+
+      - name: Upload WASM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: indigo-wasm
+          path: package-wasm/
+
   release:
-    needs: build
+    needs: [build, build-wasm]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -112,10 +143,12 @@ jobs:
 
             Available builds:
 
-            - Windows x64
-            - Linux x64
-            - macOS x64
+            - Windows x64 (`indigo-windows.exe`)
+            - Linux x64 (`indigo-linux`)
+            - macOS x64 (`indigo-macos`)
+            - WebAssembly (`indigo.wasm` / `indigo.js`)
           files: |
             indigo-linux/*
             indigo-windows/*
             indigo-macos/*
+            indigo-wasm/*
