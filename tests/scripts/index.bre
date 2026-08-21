@@ -1,0 +1,7 @@
+new name = "xFoxyyy0";
+new age = 400;
+new is_Devloper = true;
+
+proto is_Devloper
+proto name;
+proto age;

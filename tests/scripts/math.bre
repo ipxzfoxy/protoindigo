@@ -1,0 +1,15 @@
+new math = 10
+    - 10
+    + 5
+    - 2
+    * 10
+    - 10;
+
+new #Number final = math / 2;
+
+math = final;
+
+math = math * 100 + 500;
+
+new #Number final = math / 2;
+proto math
