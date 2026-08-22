@@ -9,7 +9,7 @@ namespace wave::cli
 {
 
     std::string version() {
-        return "2.0.1";
+        return "2.0.2";
     }
     std::string vm_version() {
         return "0.0.1";

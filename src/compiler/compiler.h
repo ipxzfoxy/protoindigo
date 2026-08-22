@@ -8,10 +8,17 @@
 #include "../shared/opcode.h"
 
 namespace wave::internal {
+    struct Symbol
+    {
+        bool isConst;
+        double varCount;
+    };
     using runtime_value = std::variant<std::monostate, double, bool, std::shared_ptr<std::string>>;
-    using compiler_symbol_table = std::unordered_map<std::string, double>;
+    using compiler_symbol_table = std::unordered_map<std::string, Symbol>;
     using compiler_output = std::vector<double>;
     using compiler_constant_pool = std::vector<runtime_value>;
+
+    
 
     class Compiler {
     private:
@@ -24,7 +31,7 @@ namespace wave::internal {
 
         void push(OPC opcode);
         void push_const(runtime_value v);
-        void store(std::string& identifier);
+        void store(std::string& identifier, bool isconst);
         void compile_exp(Node& n);
         void compile_binexp(Node& node);
         void compile_node(Node& n);

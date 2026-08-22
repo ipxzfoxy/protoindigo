@@ -10,7 +10,8 @@ namespace wave::internal {
         LiteralString,
         LiteralNumber,
         AssignmentExpression,
-        BinaryExpression
+        BinaryExpression,
+        Include
     };
     class Node {
     protected:

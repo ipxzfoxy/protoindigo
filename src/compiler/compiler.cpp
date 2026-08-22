@@ -29,11 +29,14 @@ namespace wave::internal {
         cp_count++;
     }
 
-    void Compiler::store(std::string& identifier)
+    void Compiler::store(std::string& identifier, bool isconst)
     {
         push(OPC::STORE);
         output.push_back(v_count);
-        symbol_table[identifier] = v_count;
+        Symbol s;
+        s.isConst = isconst;
+        s.varCount = v_count;
+        symbol_table[identifier] = s;
         v_count++;
     }
 
@@ -96,7 +99,7 @@ namespace wave::internal {
         {
             VariableNode& n = *static_cast<VariableNode*>(&node);
             compile_node(*n.value);
-            store(n.id);
+            store(n.id, n.is_const);
             break;
         }
         case NodeType::Proto:
@@ -111,7 +114,7 @@ namespace wave::internal {
             IdentifierNode& n = *static_cast<IdentifierNode*>(&node);
             isdefined(n.value);
             push(OPC::LOAD);
-            output.push_back(symbol_table[n.value]);
+            output.push_back(symbol_table[n.value].varCount);
             break;
         }
         case NodeType::LiteralString:
@@ -129,13 +132,21 @@ namespace wave::internal {
             compile_exp(node);
             break;
         }
+        case NodeType::Include:
+        {
+
+        }
         case NodeType::AssignmentExpression:
         { 
             AssignmentExpressionNode& n = *static_cast<AssignmentExpressionNode*>(&node);
             isdefined(n.targetVariable);
             compile_node(*n.value);
-            
-            store(n.targetVariable);
+            auto it = symbol_table.find(n.targetVariable);
+            if (it->second.isConst)
+            {
+                std::cout << std::format("TypeError: Cannot assign to constant '{}'.", n.targetVariable);
+            }
+            store(n.targetVariable, false);
             break;
         }
         }

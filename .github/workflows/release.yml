@@ -15,19 +15,19 @@ jobs:
             name: linux
             exe_path: build/indigo
             binary_name: indigo
-            package_name: ProtoIndigo-2.0.1-linux-x64
+            package_name: ProtoIndigo-2.0.2-linux-x64
 
           - os: windows-latest
             name: windows
             exe_path: build/Release/indigo.exe
             binary_name: indigo.exe
-            package_name: ProtoIndigo-2.0.1-windows-x64
+            package_name: ProtoIndigo-2.0.2-windows-x64
 
           - os: macos-latest
             name: macos
             exe_path: build/indigo
             binary_name: indigo
-            package_name: ProtoIndigo-2.0.1-macos-x64
+            package_name: ProtoIndigo-2.0.2-macos-x64
 
     runs-on: ${{ matrix.os }}
 
@@ -126,30 +126,34 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: ProtoIndigo 2.0.1
+          name: 2.0.2
 
           body: |
-            # ProtoIndigo 2.0.1
+            # ProtoIndigo 2.0.2
 
-            This release focuses directly on improvements, bug fixes, and optimizations, providing a better overall experience.
+            New features and amazing fixes have been added. *And still no functions... welp.*
 
-            - REPL bug fixed: In the previous version, instructions entered in the REPL would always end with a syntax error.
-            - VM and data flow optimizations.
-            - New runtime structure: ProtoIndigo now uses its own directory structure containing files and resources required for full execution, no longer relying exclusively on the `indigo` executable.
-            - Implementations using `.bre` files: Parts of ProtoIndigo, such as the `help` CLI command, are now implemented using Bre code.
+            - Constants now actually fulfill their purpose by preventing reassignment.
+            - `.bre` file inclusion has been added as an initial import system, currently in the testing and prototyping phase.
 
-            2.0.1: 2026-08-21
+            ```bre
+            include "module.bre"
+            ```
+
+            Includes the entire contents of the file.
+
+            2026-08-22
 
             ## Downloads
 
             Available builds:
 
-            - Windows x64 (`ProtoIndigo-2.0.1-windows-x64.zip`)
-            - Linux x64 (`ProtoIndigo-2.0.1-linux-x64.tar.gz`)
-            - macOS x64 (`ProtoIndigo-2.0.1-macos-x64.tar.gz`)
+            - Windows x64 (`ProtoIndigo-2.0.2-windows-x64.zip`)
+            - Linux x64 (`ProtoIndigo-2.0.2-linux-x64.tar.gz`)
+            - macOS x64 (`ProtoIndigo-2.0.2-macos-x64.tar.gz`)
             - WebAssembly (`indigo.wasm` / `indigo.js`)
 
-            Desktop builds now include the complete ProtoIndigo runtime structure.
+            Desktop builds include the complete ProtoIndigo runtime structure.
 
           files: |
             indigo-linux/*

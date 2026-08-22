@@ -9,7 +9,7 @@ namespace wave::internal {
     // RESERVED
     enum class TokenType : uint8_t {
         // Keywords
-        NEW, NOW, CONST, PROTO, AS,
+        NEW, NOW, CONST, PROTO, AS, INCLUDE,
 
         // Special
         IDENTIFIER, T_EOF, TYPING,

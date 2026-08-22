@@ -1,3 +1,15 @@
+# ProtoIndigo 2.0.2
+New features and amazing fixes have been added. *And still no functions... welp.*
+
+- Constants now actually fulfill their purpose by preventing reassignment.
+- `.bre` file inclusion has been added as an initial import system, currently in the testing and prototyping phase.
+
+```bre
+include "module.bre"
+```
+
+2026-08-22
+
 # ProtoIndigo 2.0.1
 
 This release focuses directly on improvements, bug fixes, and optimizations, providing a better overall experience.

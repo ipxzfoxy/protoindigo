@@ -9,6 +9,7 @@ namespace wave::internal {
        {"false", TokenType::BOOLEAN},
        {"proto", TokenType::PROTO},
        {"as", TokenType::AS},
+       {"include", TokenType::INCLUDE},
     };
 
     const std::unordered_map<std::string, TokenType> symbols_operators = {

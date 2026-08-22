@@ -35,6 +35,20 @@ namespace wave::internal{
                     ast.push_back(proto());
                     break;
                 }
+                case TokenType::INCLUDE:
+                {
+                    std::vector<std::unique_ptr<Node>> included = include();
+                    std::vector<std::unique_ptr<Node>> newAst;
+
+                    for(auto& n : included)
+                        newAst.push_back(std::move(n));
+                    
+                    for(auto& n : ast)
+                        newAst.push_back(std::move(n));
+                    
+                    ast = std::move(newAst);
+                    break;
+                }
                 case TokenType::IDENTIFIER:
                 {
                     const Token& nextToken = peek();
@@ -155,6 +169,8 @@ namespace wave::internal{
                 break;
             }
 
+            
+
             default:
             {
                 consume();
@@ -264,6 +280,18 @@ namespace wave::internal{
         }
 
         return std::move(left);
+    }
+
+    std::vector<std::unique_ptr<Node>> Parser::include()
+    {
+        expect(TokenType::INCLUDE);
+        std::string target = std::get<std::string>(current().getValue());
+        expect(TokenType::LITERAL_STRING);
+        Tokenizer tkz(readBreFile(target));
+        Parser parser(tkz);
+        parser.parse();
+
+        return std::move(parser.takeAST());
     }
 
     bool Parser::isOp_symbol(const Token& t) const

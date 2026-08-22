@@ -11,6 +11,7 @@
 #include <variant>
 #include <format>
 #include <utility>
+#include "../../utils/readBreFile.h"
 #include "../tokenizer/tokenizer.h"
 #include "nodes/node.h"
 #include "nodes/proto.h"
@@ -34,9 +35,10 @@ namespace wave::internal
         std::optional<std::unique_ptr<Node>> primary();
         std::unique_ptr<VariableNode> variable();
         std::unique_ptr<ProtoNode> proto();
+        std::vector<std::unique_ptr<Node>> include();
         std::unique_ptr<AssignmentExpressionNode> assignment();
         std::unique_ptr<Node> term();
-        BinaryOperation op_symbol();
+        BinaryOperation op_symbol();        
         bool isOp_symbol(const Token& t) const;
         const Token& consume();
         const Token& current();
@@ -48,6 +50,7 @@ namespace wave::internal
         Parser(Tokenizer& tokenizer);
         void parse();
         const std::vector<std::unique_ptr<Node>> getAST() { return std::move(ast); };
+        std::vector<std::unique_ptr<Node>> takeAST() { return std::move(ast); };
     };
 } // namespace wave::internal
 
