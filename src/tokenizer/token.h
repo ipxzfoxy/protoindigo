@@ -6,22 +6,44 @@
 #include <variant>
 
 namespace wave::internal {
-    // RESERVED
+
     enum class TokenType : uint8_t {
-        // Keywords
-        NEW, NOW, CONST, PROTO, AS, INCLUDE,
+        NEW,
+        NOW,
+        CONST,
+        PROTO,
+        AS,
+        INCLUDE,
+        IDENTIFIER,
+        T_EOF,
+        TYPING,
 
-        // Special
-        IDENTIFIER, T_EOF, TYPING,
+        EQUAL,
+        LPAREN,
+        RPAREN,
+        LBRACE,
+        RBRACE,
+        LT,
+        GT,
+        COLON,
+        SEMICOLON,
+        HASH,
+        PLUS,
+        MINUS,
+        STAR,
+        SLASH,
+        DOT,
+        COMMA,
 
-        // Symbols
-        EQUAL, LPAREN, RPAREN, LBRACE, RBRACE, LT, GT, COLON, SEMICOLON,
-        HASH, PLUS, MINUS, STAR, SLASH, DOT, COMMA,
-
-        // Literal
-        LITERAL_STRING, TEMPLATE_STRING, NUMBER, T_NULL, BOOLEAN
+        LITERAL_STRING,
+        TEMPLATE_STRING,
+        NUMBER,
+        T_NULL,
+        BOOLEAN,
+        INCREMENT,
+        DECREMENT,
+        POW
     };
-
     class Token {
         TokenType type;
         std::variant<std::string, double, bool> value;
@@ -33,7 +55,8 @@ namespace wave::internal {
     };
 
     extern const std::unordered_map<std::string, TokenType> keywords;
-    extern const std::unordered_map<std::string, TokenType> symbols_operators;
+    extern const std::unordered_map<std::string, TokenType> symbols;
+    extern const std::unordered_map<std::string, TokenType> operators;
 }
 
 // copyright (c) 2026 Victor Botelho Anunciação

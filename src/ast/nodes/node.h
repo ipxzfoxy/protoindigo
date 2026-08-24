@@ -11,7 +11,7 @@ namespace wave::internal {
         LiteralNumber,
         AssignmentExpression,
         BinaryExpression,
-        Include
+        ScopeExpression
     };
     class Node {
     protected:

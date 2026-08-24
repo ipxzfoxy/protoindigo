@@ -2,17 +2,24 @@
 
 namespace wave::internal {
     const std::unordered_map<std::string, TokenType> keywords = {
-       {"new", TokenType::NEW},
-       {"now", TokenType::NOW},
-       {"const", TokenType::CONST},
-       {"true", TokenType::BOOLEAN},
-       {"false", TokenType::BOOLEAN},
-       {"proto", TokenType::PROTO},
-       {"as", TokenType::AS},
-       {"include", TokenType::INCLUDE},
+        {"new", TokenType::NEW},
+        {"now", TokenType::NOW},
+        {"const", TokenType::CONST},
+        {"true", TokenType::BOOLEAN},
+        {"false", TokenType::BOOLEAN},
+        {"proto", TokenType::PROTO},
+        {"include", TokenType::INCLUDE},
+        //{"return", TokenType::RETURN},
     };
 
-    const std::unordered_map<std::string, TokenType> symbols_operators = {
+    const std::unordered_map<std::string, TokenType> operators = {
+        {"++", TokenType::INCREMENT},
+        {"--", TokenType::DECREMENT},
+        //{"-=", TokenType::DECREMENT},
+        //{"+=", TokenType::DECREMENT}
+    };
+
+    const std::unordered_map<std::string, TokenType> symbols = {
         {"=", TokenType::EQUAL},
         {"(", TokenType::LPAREN},
         {")", TokenType::RPAREN},

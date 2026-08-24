@@ -4,9 +4,8 @@
 #include <memory>
 #include <iostream>
 #include <unordered_map>
-#include "../parsing/parser.h"
+#include "../ast/ast.h"
 #include "../shared/opcode.h"
-
 namespace wave::internal {
     struct Symbol
     {

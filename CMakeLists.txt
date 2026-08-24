@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(indigo)
 
@@ -22,8 +23,6 @@ file(GLOB_RECURSE SOURCES
     "${CMAKE_SOURCE_DIR}/operation/*.cpp"
 )
 
-
-
 add_executable(indigo ${SOURCES})
 
 add_custom_command(TARGET indigo POST_BUILD
@@ -36,6 +35,10 @@ add_custom_command(TARGET indigo POST_BUILD
         "$<TARGET_FILE_DIR:indigo>/LICENSE"
 )
 
+message(STATUS "ROOT = ${CMAKE_SOURCE_DIR}")
+message(STATUS "SOURCES = ${SOURCES}")
+
 target_include_directories(indigo PRIVATE
     "${CMAKE_SOURCE_DIR}"
+    "${CMAKE_SOURCE_DIR}/depends/brevm"
 )

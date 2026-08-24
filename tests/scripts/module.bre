@@ -1,1 +1,2 @@
-new x = 10;
+new x = "Hello, World!";
+new #Number number = 100;

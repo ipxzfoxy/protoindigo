@@ -1,3 +1,26 @@
+# ProtoIndigo 2.0.3
+
+Structural reorganization for improved code maintainability, along with a few additional utilities.
+
+- Parser reorganized and split into multiple files.
+- New increment and decrement instructions:
+
+```bre
+new x = 10;
+
+x++
+x--
+```
+
+- Added support for comments:
+
+```bre
+proto "Hello, World!";
+
+// And still no functions... welp.
+```
+2026-08-22
+
 # ProtoIndigo 2.0.2
 New features and amazing fixes have been added. *And still no functions... welp.*
 

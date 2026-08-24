@@ -1,3 +1,9 @@
-include "module.bre"
+include "tests/scripts/module.bre"
 
-proto x;
+proto x
+
+number++
+proto number
+
+number--
+proto number

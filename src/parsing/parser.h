@@ -12,16 +12,16 @@
 #include <format>
 #include <utility>
 #include "../../utils/readBreFile.h"
+#include "../ast/nodes/node.h"
+#include "../ast/nodes/proto.h"
+#include "../ast/nodes/variable.h"
+#include "../ast/nodes/identifier.h"
+#include "../ast/nodes/literals/string.h"
+#include "../ast/nodes/literals/number.h"
+#include "../ast/nodes/literals/boolean.h"
+#include "../ast/nodes/expression/assignment.h"
+#include "../ast/nodes/expression/binary.h"
 #include "../tokenizer/tokenizer.h"
-#include "nodes/node.h"
-#include "nodes/proto.h"
-#include "nodes/variable.h"
-#include "nodes/identifier.h"
-#include "nodes/literals/string.h"
-#include "nodes/literals/number.h"
-#include "nodes/literals/boolean.h"
-#include "nodes/expression/assignment.h"
-#include "nodes/expression/binary.h"
 
 namespace wave::internal
 {   
@@ -32,13 +32,16 @@ namespace wave::internal
         Tokenizer tokenizer;
         std::vector<Token> tokens;
         std::vector<std::unique_ptr<Node>> ast;
+        std::unique_ptr<Node> next();
         std::optional<std::unique_ptr<Node>> primary();
         std::unique_ptr<VariableNode> variable();
         std::unique_ptr<ProtoNode> proto();
-        std::vector<std::unique_ptr<Node>> include();
         std::unique_ptr<AssignmentExpressionNode> assignment();
-        std::unique_ptr<Node> term();
-        BinaryOperation op_symbol();        
+        std::vector<std::unique_ptr<Node>> include();
+        std::unique_ptr<AssignmentExpressionNode> indec();
+        std::unique_ptr<Node> expression();
+        std::vector<std::unique_ptr<Node>> parse_scope();
+        BinaryOperation op_symbol();
         bool isOp_symbol(const Token& t) const;
         const Token& consume();
         const Token& current();
@@ -46,7 +49,6 @@ namespace wave::internal
         const Token& previous();
         void expect(TokenType expected);
     public:
-        
         Parser(Tokenizer& tokenizer);
         void parse();
         const std::vector<std::unique_ptr<Node>> getAST() { return std::move(ast); };

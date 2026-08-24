@@ -126,12 +126,26 @@ namespace wave::internal {
     Token Tokenizer::sym_op()
     {
         std::string res;
-        while (current_char != '\0' && std::ispunct(current_char)) {
-            res += current_char;
+        res += current_char;
+
+        std::string two = res + peek_char();
+
+        auto it = operators.find(two);
+        if (it != operators.end())
+        {
             adv();
-            auto it = symbols_operators.find(res);
-            if (it != symbols_operators.end()) return Token(it->second, it->first);
+            adv();
+            return Token(it->second, it->first);
         }
+
+        auto it_sym = symbols.find(res);
+        if (it_sym != symbols.end())
+        {
+            adv();
+            return Token(it_sym->second, it_sym->first);
+        }
+
+        adv();
         return Token(TokenType::T_NULL, res);
     }
 
@@ -139,6 +153,15 @@ namespace wave::internal {
     {
         skipws();
         if (current_char == '\0') return Token(TokenType::T_EOF, "");
+        // To comments
+        if (current_char == '/' && peek_char() == '/')
+        {
+            while (current_char != '\n' && current_char != '\0')
+            {
+                adv();
+            }
+            return next();
+        }
         if (std::isalpha(current_char) || current_char == '_') return keyword();
         if (current_char == '"' || current_char == '\'' || current_char == '`') {
             return string();
@@ -149,7 +172,13 @@ namespace wave::internal {
         adv();
         return Token(TokenType::T_NULL, "");
     }
+    char Tokenizer::peek_char()
+    {
+        if (src_index + 1 < source.size())
+            return source[src_index + 1];
 
+        return '\0';
+    }
     bool Tokenizer::toBool(std::string& str)
     {
         return str == "true";

@@ -1,0 +1,5 @@
+#pragma once
+
+#define BREVM_VERSION_MAJOR 1
+#define BREVM_VERSION_MINOR 1
+#define BREVM_VERSION_PATCH 0

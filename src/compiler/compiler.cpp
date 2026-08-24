@@ -132,10 +132,6 @@ namespace wave::internal {
             compile_exp(node);
             break;
         }
-        case NodeType::Include:
-        {
-
-        }
         case NodeType::AssignmentExpression:
         { 
             AssignmentExpressionNode& n = *static_cast<AssignmentExpressionNode*>(&node);
@@ -144,7 +140,9 @@ namespace wave::internal {
             auto it = symbol_table.find(n.targetVariable);
             if (it->second.isConst)
             {
-                std::cout << std::format("TypeError: Cannot assign to constant '{}'.", n.targetVariable);
+                std::cout << "TypeError: Cannot assign to constant '"
+                    << n.targetVariable
+                    << "'.";
             }
             store(n.targetVariable, false);
             break;

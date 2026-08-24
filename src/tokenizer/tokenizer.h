@@ -26,6 +26,7 @@ namespace wave::internal {
         Token sym_op();
         Token typing();
         Token next();
+        char peek_char();
         bool toBool(std::string& str);
     public:
         void tokenize();
