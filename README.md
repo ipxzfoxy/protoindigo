@@ -3,7 +3,9 @@ ProtoIndigo Interpreter
 <div align="center">"C++20" (https://img.shields.io/badge/C%2B%2B-20-blue.svg)
 "Platform" (https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Wasm-lightgrey)
 
-</div>ProtoIndigo is a programming language compiled into bytecode and executed by its own virtual machine, BreVM.
+</div>
+
+ProtoIndigo is a programming language compiled into bytecode and executed by its own virtual machine, BreVM.
 
 Designed for executing programs with the ".bre" extension, the language uses an architecture based on modern interpretation models, featuring its own bytecode format and a dedicated runtime for its execution.
 
