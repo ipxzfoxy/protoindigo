@@ -1,19 +1,18 @@
-# ProtoIndigo Interpreter
+ProtoIndigo Interpreter
 
-![C++20](https://img.shields.io/badge/C%2B%2B-20-blue.svg)
-![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Wasm-lightgrey)
+<div align="center">"C++20" (https://img.shields.io/badge/C%2B%2B-20-blue.svg)
+"Platform" (https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Wasm-lightgrey)
 
-ProtoIndigo is a programming language compiled into bytecode and executed by its own virtual machine, BreVM.
+</div>ProtoIndigo is a programming language compiled into bytecode and executed by its own virtual machine, BreVM.
 
-Designed for executing programs with the `.bre` extension, the language uses an architecture based on modern interpretation models, featuring its own bytecode format and a dedicated runtime for its execution.
+Designed for executing programs with the ".bre" extension, the language uses an architecture based on modern interpretation models, featuring its own bytecode format and a dedicated runtime for its execution.
 
 The language has a lightweight and declarative syntax, maintaining familiarity with modern programming language concepts while preserving its own identity. Currently, it supports mathematical operations, variable declaration and reassignment, and data output.
 
 It is also possible to integrate ProtoIndigo into C++ applications through the embedding API currently under development.
 
-## See a .bre program!
+See a .bre program!
 
-```bre
 now name = "xFoxyyy0"
 new age = 90
 
@@ -21,21 +20,19 @@ age = 20 + age
 
 proto name
 proto age
-```
 
-This is an incomplete example. You can see the complete syntax [here.](https://github.com/ipxzfoxy/protoindigo/tree/main/tests/scripts)
+This is an incomplete example. You can see the complete syntax "here." (https://github.com/ipxzfoxy/protoindigo/tree/main/tests/scripts)
 
-## Installing
+Installing
 
-[Install ProtoIndigo on your machine!](https://github.com/ipxzfoxy/protoindigo/releases)
+"Install ProtoIndigo on your machine!" (https://github.com/ipxzfoxy/protoindigo/releases)
 
-> Pre-compiled files are available for Windows, macOS, Ubuntu and WebAssembly.
+«Pre-compiled files are available for Windows, macOS, Ubuntu and WebAssembly.»
 
-## Embedding
+Embedding
 
-Use the C++ API to create and control  Operations:
+Use the C++ API to create and control Operations:
 
-```cpp
 #include "operation/w_operation.h"
 
 int main(int argc, char* argv[])
@@ -45,11 +42,10 @@ int main(int argc, char* argv[])
     OP.executeString(code);
     return 0;
 }
-```
 
-## Building ProtoIndigo
+Building ProtoIndigo
 
-### Requirements
+Requirements
 
 - C++20
 - CMake
@@ -58,37 +54,30 @@ int main(int argc, char* argv[])
 
 Developed and tested using Clang + Ninja.
 
-```bash
 git clone https://github.com/ipxzfoxy/protoindigo
 cd protoindigo
 
 cmake -B build -G Ninja
 cmake --build build
-```
 
-### Using the CLI
+Using the CLI
 
-```bash
 ./indigo.exe run index.bre
-```
 
 or if it has already been added to your PATH:
 
-```bash
 indigo run index.bre
-```
 
 * The first argument must be the path to the file you want to interpret.
 
 See all available commands:
 
-```bash
 indigo help
-```
 
-## LICENSE
-**[PROTOINDIGO LICENSE](https://github.com/ipxzfoxy/protoindigo/blob/main/LICENSE)**
+LICENSE
 
-## Developer
+"PROTOINDIGO LICENSE" (https://github.com/ipxzfoxy/protoindigo/blob/main/LICENSE)
 
-Developed by **Victor Botelho Anunciação** (xFoxyyy0).
+Developer
+
+Developed by Victor Botelho Anunciação (xFoxyyy0).
