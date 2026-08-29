@@ -35,7 +35,7 @@ Use the C++ API to create and control  Operations:
 ```cpp
 #include "operation/w_operation.h"
 
-int main()
+int main(int argc, char* argv[])
 {
     std::string code = wave::readBreFile(argv[2]);
     wave::Operation OP = wave::create_operation();
