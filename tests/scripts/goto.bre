@@ -1,0 +1,7 @@
+new a = 10;
+label home;
+
+a++
+
+proto a
+go to home

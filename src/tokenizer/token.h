@@ -6,7 +6,6 @@
 #include <variant>
 
 namespace wave::internal {
-
     enum class TokenType : uint8_t {
         NEW,
         NOW,
@@ -17,12 +16,16 @@ namespace wave::internal {
         IDENTIFIER,
         T_EOF,
         TYPING,
-
+        CTX_KW,
+        GO,
+        TO,
         EQUAL,
         LPAREN,
         RPAREN,
         LBRACE,
         RBRACE,
+        LBRACKET,
+        RBRACKET,
         LT,
         GT,
         COLON,

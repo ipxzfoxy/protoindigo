@@ -35,8 +35,11 @@ namespace wave::internal
 				consume();
 		}
 		else {
-			std::cout << "SyntaxError\nExpected " << (int)expected
-				<< " but: " << (int)current().getType();
+
+			std::cout
+                << "SyntaxError: Expected '"
+                << tokenTypeName(expected)
+				<< "' but: <" << tokenTypeName(current().getType()) << ">";
 			exit(1);
 		}
     }
@@ -70,12 +73,18 @@ namespace wave::internal
     {
         const TokenType& type = t.getType();
         if (
-            type == TokenType::PLUS ||
-            type == TokenType::MINUS ||
-            type == TokenType::STAR ||
-            type == TokenType::SLASH
+            type == TokenType::PLUS     ||
+            type == TokenType::MINUS    ||
+            type == TokenType::STAR     ||
+            type == TokenType::SLASH    //
         ) return true;
         return false;
+    }
+
+    void Parser::skipSemicolon()
+    {
+        if (current().getType() == TokenType::SEMICOLON)
+            consume();
     }
 } // namespace wave::internal
 // copyright (c) 2026 Victor Botelho Anunciação

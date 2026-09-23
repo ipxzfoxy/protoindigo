@@ -2,7 +2,7 @@
 * ProtoIndigo Tokenizer
 * tokenizer.cpp
 * 
-* ---------------TOKEN BODY ----------------
+* --------------- TOKEN BODY ---------------
 * |   Type - TokenType   |  String - Value |
 * ------------------------------------------
 */

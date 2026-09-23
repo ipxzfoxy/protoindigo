@@ -4,124 +4,200 @@
  */
 
 #include "include/vm.h"
-#include "depends/brevm-spec/opcode.h"
 
 namespace brevm
 {
     // Executes a bytecode vector
-    int VM::execute(spec::bytecodePool bc)
+    int VM::execute()
     {
-        using namespace spec;
-
-        size_t ip = 0;
-        
-
-        while (ip < bc.size())
+        while (ip < bytecode.size())
         {
-            uint8_t current = bc[ip];
-            switch (static_cast<spec::OPC>(current))
+            switch (static_cast<OPC>(current))
             {
-                
                 case OPC::LDC:
                 {
-                    std::cout << "LoadConst\n";
-                    ip++; current = bc[ip];
-                    const std::shared_ptr<RuntimeValue> constant = memory.getConstant(current);
-                    ip++; current = bc[ip];
-                    registers[current] = constant;
-                    ip++;
+                    const std::shared_ptr<RuntimeValue> constant = memory.getConstant(adv());
+                    registers[adv()] = constant;
+                    adv();
                     break;
                 }
                 case OPC::ADD:
                 {
-                    std::cout << "Add\n";
-                    ip++; current = bc[ip];
-                    const spec::reg arg1 = registers[current];
-                    ip++; current = bc[ip];
-                    const spec::reg arg2 = registers[current];
-                    ip++; current = bc[ip];
-                    const std::shared_ptr<spec::RuntimeValue> res = add(arg1, arg2);
-                    registers[current] = std::move(res);
-                    ip++;
+                    const reg arg1 = registers[adv()];
+                    const reg arg2 = registers[adv()];
+                    const std::shared_ptr<RuntimeValue> res = add(arg1, arg2);
+                    registers[adv()] = std::move(res);
+                    adv();
                     break;
                 }
                 case OPC::SUB:
                 {
-                    std::cout << "Sub\n";
-                    ip++; current = bc[ip];
-                    const spec::reg arg1 = registers[current];
-                    ip++; current = bc[ip];
-                    const spec::reg arg2 = registers[current];
-                    ip++; current = bc[ip];
-                    const std::shared_ptr<spec::RuntimeValue> res = sub(arg1, arg2);
-                    registers[current] = std::move(res);
-                    ip++;
+                    const reg arg1 = registers[adv()];
+                    const reg arg2 = registers[adv()];
+                    const std::shared_ptr<RuntimeValue> res = sub(arg1, arg2);
+                    registers[adv()] = std::move(res);
+                    adv();
                     break;
                 }
                 case OPC::MUL:
                 {
-                    std::cout << "Mul\n";
-                    ip++; current = bc[ip];
-                    const spec::reg arg1 = registers[current];
-                    ip++; current = bc[ip];
-                    const spec::reg arg2 = registers[current];
-                    ip++; current = bc[ip];
-                    const std::shared_ptr<spec::RuntimeValue> res = mul(arg1, arg2);
-                    registers[current] = std::move(res);
-                    ip++;
+                    const reg arg2 = registers[adv()];
+                    const reg arg1 = registers[adv()];                    
+                    const std::shared_ptr<RuntimeValue> res = mul(arg1, arg2);
+                    registers[adv()] = std::move(res);
+                    adv();
                     break;
                 }
                 case OPC::DIV:
                 {
-                    std::cout << "Div\n";
-                    ip++; current = bc[ip];
-                    const spec::reg arg1 = registers[current];
-                    ip++; current = bc[ip];
-                    const spec::reg arg2 = registers[current];
-                    ip++; current = bc[ip];
-                    const std::shared_ptr<spec::RuntimeValue> res = div(arg1, arg2);
-                    registers[current] = std::move(res);
-                    ip++;
+                    const reg arg2 = registers[adv()];
+                    const reg arg1 = registers[adv()];                   
+                    const std::shared_ptr<RuntimeValue> res = div(arg1, arg2);
+                    registers[adv()] = std::move(res);
+                    adv();
                     break;
                 }
                 case OPC::MOD:
                 {
-                    std::cout << "Mod\n";
-                    ip++; current = bc[ip];
-                    const spec::reg arg1 = registers[current];
-                    ip++; current = bc[ip];
-                    const spec::reg arg2 = registers[current];
-                    ip++; current = bc[ip];
-                    const std::shared_ptr<spec::RuntimeValue> res = mod(arg1, arg2);
-                    registers[current] = std::move(res);
-                    ip++;
+                    const reg arg2 = registers[adv()];
+                    const reg arg1 = registers[adv()];                   
+                    const std::shared_ptr<RuntimeValue> res = mod(arg1, arg2);
+                    registers[adv()] = std::move(res);
+                    adv();
                     break;
                 }
-                case OPC::WRITE:
+                case OPC::WR:
                 {
-                    std::cout << "Write\n";
-                    ip++; current = bc[ip];
-                    std::shared_ptr<RuntimeValue> reg = registers[current];
-
-                    std::cout << reg.get()->toString() << std::endl;
-                    ip++;
+                    std::shared_ptr<RuntimeValue> reg = registers[adv()];
+                    std::cout << reg.get()->toString() << "\n";
+                    adv();
                     break;
                 }
                 case OPC::MOV:
                 {
-                    std::cout << "Mov\n";
-                    ip++; current = bc[ip];
-                    std::shared_ptr<RuntimeValue> arg = registers[current];
-                    ip++; current = bc[ip];
-                    registers[current] = arg;
-                    ip++;
+                    std::shared_ptr<RuntimeValue> arg = registers[adv()];
+                    registers[adv()] = arg;
+                    adv();
+                    break;
+                }
+                case OPC::SADD:
+                {
+                    const std::shared_ptr<RuntimeValue> arg2 = spop();
+                    const std::shared_ptr<RuntimeValue> arg1 = spop();
+                    const std::shared_ptr<RuntimeValue> res = add(arg1, arg2);
+                    stack.push_back(res);
+                    adv();
+                    break;
+                }
+                case OPC::SSUB:
+                {
+                    const std::shared_ptr<RuntimeValue> arg2 = spop();
+                    const std::shared_ptr<RuntimeValue> arg1 = spop();
+                    const std::shared_ptr<RuntimeValue> res = sub(arg1, arg2);
+                    stack.push_back(res);
+                    adv();
+                    break;
+                }
+                case OPC::SMUL:
+                {
+                    const std::shared_ptr<RuntimeValue> arg2 = spop();
+                    const std::shared_ptr<RuntimeValue> arg1 = spop();
+                    const std::shared_ptr<RuntimeValue> res = mul(arg1, arg2);
+                    stack.push_back(res);
+                    adv();
+                    break;
+                }
+                case OPC::SDIV:
+                {
+                    const std::shared_ptr<RuntimeValue> arg2 = spop();
+                    const std::shared_ptr<RuntimeValue> arg1 = spop();
+                    const std::shared_ptr<RuntimeValue> res = div(arg1, arg2);
+                    stack.push_back(res);
+                    adv();
+                    break;
+                }
+                case OPC::SMOD:
+                {
+                    const std::shared_ptr<RuntimeValue> arg2 = spop();
+                    const std::shared_ptr<RuntimeValue> arg1 = spop();
+                    const std::shared_ptr<RuntimeValue> res = mod(arg1, arg2);
+                    stack.push_back(res);
+                    adv();
+                    break;
+                }
+                case OPC::SWR:
+                {
+                    std::shared_ptr<RuntimeValue> v = spop();
+                    std::cout << v.get()->toString() << "\n";
+                    adv();
+                    break;
+                }
+                case OPC::SLDC:
+                {
+                    stack.push_back(memory.getConstant(adv()));
+                    adv();
+                    break;
+                }
+                case OPC::JMP:
+                {
+                    ip = adv();
+                    current = bytecode[ip];
+                    break;;
+                }
+                case OPC::LDS:
+                {
+                    std::shared_ptr<RuntimeValue> slot = memory.ld_slot(adv());
+                    registers[adv()] = std::move(slot);
+                    adv();
+                    break;
+                }
+                case OPC::STS:
+                {
+                    size_t i = adv();
+                    memory.store_slot(i, registers[adv()]);
+                    adv();
+                    break;
+                }
+                case OPC::SLDS:
+                {
+                    stack.push_back(memory.ld_slot(adv()));
+                    adv();
+                    break;
+                }
+                case OPC::SSTS:
+                {
+                    ip++; current = bytecode[ip];
+                    size_t index = current;
+                    memory.store_slot(index, spop());
+                    ip++; current = bytecode[ip];
+                    break;
+                }
+                case OPC::MSR:
+                {
+                    ip++; current = bytecode[ip];
+                    registers[current] = stack.back();
+                    ip++; current = bytecode[ip];
+                    break;
+                }
+                case OPC::PSR:
+                {
+                    ip++; current = bytecode[ip];
+                    registers[current] = spop();
+                    ip++; current = bytecode[ip];
+                    break;
+                }
+                case OPC::MRS:
+                {
+                    ip++; current = bytecode[ip];
+                    stack.push_back(registers[current]);
+                    ip++; current = bytecode[ip];
                     break;
                 }
                 case OPC::HALT:
-                {
-                    std::cout << "Halt\n";
+                {   
                     return 0;
                 }
+
                 default:
                 {
                     throw error::Error(std::format(
@@ -135,3 +211,6 @@ namespace brevm
         return 0;
     }
 } // namespace brevm
+
+// Copyright (c) 2026 Victor Botelho Anunciação.
+// All rights reserved.

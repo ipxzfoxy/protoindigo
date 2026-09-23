@@ -3,7 +3,7 @@
 namespace wave::internal
 {
     // Variables & Functions
-    std::unique_ptr<VariableNode> Parser::variable()
+    std::unique_ptr<Node> Parser::variable()
     {
         bool constant = false;
         std::string typing = "auto";
@@ -44,60 +44,6 @@ namespace wave::internal
         identifier = std::get<std::string>(current().getValue());
 
         expect(TokenType::IDENTIFIER);
-
-        /*if (
-            current().getType() == TokenType::LPAREN ||
-            current().getType() == TokenType::IDENTIFIER 
-        )
-        {
-            std::cout << "Declaração de função detectada." << std::endl;
-            std::vector<FunctionParamNode> params;
-            if (current().getType() == TokenType::LPAREN)
-            {
-                std::cout << "Declaração padrão" << std::endl;
-                consume();
-                while (!(current().getType() == TokenType::RPAREN))
-                {
-                    if (current().getType() == TokenType::COLON)
-                    {
-                        consume();
-                        continue;
-                    }
-                    params.push_back(FunctionParamNode(std::get<std::string>(current().getValue())));
-                    consume();
-                }
-                consume();
-            } 
-            else if (current().getType() == TokenType::IDENTIFIER)
-            {
-                std::cout << "Declaração simples" << std::endl;
-                while (!(current().getType() == TokenType::LBRACE))
-                {
-                    expect(TokenType::IDENTIFIER);
-                    params.push_back(FunctionParamNode(std::get<std::string>(current().getValue())));
-                }
-            }
-
-            if (current().getType() == TokenType::LBRACE)
-            {
-                std::cout << "Entrando no escopo da função." << std::endl;
-                std::vector<std::unique_ptr<Node>> childAst = std::move(parse_scope());
-                std::cout << "Escopo analisado." << std::endl;
-                value = std::move(std::make_unique<FunctionNode>(std::move(childAst), params));
-                std::cout << "Node de função completo. Variável declarada." << std::endl;
-                if (current().getType() == TokenType::SEMICOLON) consume();
-
-                return std::make_unique<VariableNode>(
-                    constant,
-                    typing,
-                    identifier,
-                    std::move(value.value())
-                );
-            } else {
-                std::cout << "Função sem implementação declarada. Não foi guardada." << std::endl;
-            }
-
-        }*/
         expect(TokenType::EQUAL);
 
         value = std::move(expression());
@@ -111,7 +57,7 @@ namespace wave::internal
         );
     }
     // Proto statement
-    std::unique_ptr<ProtoNode> Parser::proto()
+    std::unique_ptr<Node> Parser::proto()
     {
         expect(TokenType::PROTO);
 
@@ -119,15 +65,15 @@ namespace wave::internal
 
         if (!exp.has_value())
         {
-            std::cout << "SyntaxError\nExpected a expression. <proto>" << std::endl;
+            std::cout << "SyntaxError: Expected a expression." << std::endl;
             exit(1);
         }
-
-        if (current().getType() == TokenType::SEMICOLON) consume();
+        
+        skipSemicolon();
         return std::make_unique<ProtoNode>(std::move(exp.value()));
     }
 
-    std::unique_ptr<AssignmentExpressionNode> Parser::assignment()
+    std::unique_ptr<Node> Parser::assignment()
     {
         const std::string target = std::get<std::string>(current().getValue());
 
@@ -152,6 +98,27 @@ namespace wave::internal
         parser.parse();
 
         return std::move(parser.takeAST());
+    }
+
+    std::unique_ptr<Node> Parser::label()
+    {
+        consume();
+        std::string identifier = std::get<std::string>(current().getValue());
+        expect(TokenType::IDENTIFIER);
+        skipSemicolon();
+
+        return std::make_unique<JumpNode>(std::make_unique<IdentifierNode>(identifier), true);
+    }
+
+    std::unique_ptr<Node> Parser::go_to()
+    {
+        expect(TokenType::GO);
+        expect(TokenType::TO);
+
+        std::string target = std::get<std::string>(current().getValue());
+        expect(TokenType::IDENTIFIER);
+
+        return std::make_unique<JumpNode>(std::make_unique<IdentifierNode>(target), false);
     }
 } // namespace wave::internal
 // copyright (c) 2026 Victor Botelho Anunciação

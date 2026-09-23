@@ -11,3 +11,6 @@ namespace brevm::error
         : std::runtime_error(message) {}
     };
 } // namespace brevm::errors
+
+// Copyright (c) 2026 Victor Botelho Anunciação.
+// All rights reserved.

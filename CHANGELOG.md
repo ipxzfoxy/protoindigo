@@ -1,25 +1,156 @@
-# ProtoIndigo 2.0.3
+# ProtoIndigo 2.1.0
+**Structural reorganization** for improved **code maintainability**, along with a few **additional utilities**.
 
-Structural reorganization for improved code maintainability, along with a few additional utilities.
-
+## Mudanças internas específicas
+- BreVM desaclopada do repositório protoindigo, transferindo-se para seu próprio repositório.
+- compiler/ renomeado apra codegen/
+- orquetrador de codegen renomeado de Compiler para WaveCoder
 - Parser reorganized and split into multiple files.
-- New increment and decrement instructions:
+- Codegen reformulado para seguir a BreVMR 1
+- Mudanças no Tokenizer
+- Novos tokens: `CTX_KW`, `GO`, `TO`
+
+## Relevante
+- Diversas mudanças no compilador
+- Adicionado suporte para BreVM v0.0.2
+- Adicionado suporte para BreVMR 1
+- Tokenizer aprimorado
+* CLI atualizada: Agora é possível executar arquivos `.bre` diretamente pela linha de comando, sem a necessidade de utilizar explicitamente o comando `run`.
+
+  Por exemplo, em vez de:
+
+  `indigo run file.bre`
+
+  agora também é possível utilizar:
+
+  `indigo file.bre`
+
+  O uso de `indigo run file.bre` continua sendo recomendado por deixar a intenção do comando explícita. Além disso, o comando `run` é obrigatório para executar arquivos que não possuem a extensão `.bre`.
+
+- New increment and decrement instructions
+> Instruções para incrementar ou decrementar um dígito a uma variável do tipo number.
 
 ```bre
 new x = 10;
-
-x++
-x--
+x++ // Equivalente a x = x + 1;
+x-- // Equivalente a x = x - 1;
 ```
 
-- Added support for comments:
+- Added support for comments
+> Comentários são ignorados pelo parser e não chegam na fase de code generation.
 
 ```bre
 proto "Hello, World!";
 
 // And still no functions... welp.
 ```
-2026-08-22
+
+- Diagnósticos melhorados e padronizados. de:
+
+```bash
+SyntaxError
+Expected 11 but: 7
+```
+
+para
+
+```bash
+SyntaxError: Expected ')' but: <end_of_file>
+```
+
+- Adicionado suporte para expressões dentro de parênteses:
+
+```bre
+new x = 10 + (10 / 2) // Retornando 15, com a expressão dentro dos parênteses send resolvida com prioridade.
+```
+
+- Adicionada Multiplicação implícita
+
+```bre
+new x = 10;
+
+proto 2x
+```
+
+retorna `20`, que é equivalente a:
+
+```bre
+new x = 10;
+
+proto 2 * x
+```
+
+E também com parenteses:
+
+```bre
+proto 2(10 / 2)
+```
+
+retorna `25`, que é equivalente a:
+
+```bre
+proto 2 * (10 / 2)
+```
+
+- Nova instrução: label
+> Utilizada para marcar pontos específicos no código. permitindo que instruções como goto desviem o fluxo de execução da VM para determinado ponto.
+
+```bre
+label home // label <IDENTIFIER>
+```
+
+- Nova instrução: go/to
+> A instrução go/to desvia o fluxo de execução para um determinado ponto, marcado por um label.
+
+```bre
+label home
+
+proto "Hello, World!"
+
+go to home
+```
+
+*Que a partir do ponto marcado por `home`, o compilador irá ejetar o opcode `JMP` para voltar ou avançar a partir do ponto marcado pelo label.*
+
+- go/to com contatores
+> Define um limite de quantas vezes tal go/to pode ser executado.
+
+Que nesse caso, o pulo até home só poderia ser feito 2 vezes.
+
+```bre
+label home
+
+proto "Hello, World!"
+
+go 2 to home
+```
+
+- go/to explícitos
+> Um forma de redirecionar a execução usando go/to com números no lugar de labels.
+
+```
+go to 1
+```
+
+- label proto
+> Labels podem ser jogados na saída. que retornam um size_t indicando o ponto que o label aponta.
+
+# Mudanças completas
+
+- BreVM desaclopada do repositório protoindigo, transferindo-se para seu próprio repositório.
+- compiler/ renomeado apra codegen/
+- Diversas mudaças no compilador
+- Codegen reformulado para seguir a BreVMR 1
+- Adicionado suporte para BreVM v0.0.2
+- Parser reorganized and split into multiple files.
+- Tokenizer aprimorado
+- New increment and decrement instructions
+- Added support for comments
+- Diagnósticos melhorados e padronizados.
+- Adicionado suporte para expressões dentro de parênteses.
+- Adicionada Multiplicação implícita.
+
+*2026-09-02*
 
 # ProtoIndigo 2.0.2
 New features and amazing fixes have been added. *And still no functions... welp.*
@@ -27,8 +158,16 @@ New features and amazing fixes have been added. *And still no functions... welp.
 - Constants now actually fulfill their purpose by preventing reassignment.
 - `.bre` file inclusion has been added as an initial import system, currently in the testing and prototyping phase.
 
+Module
+```
+now VERSION = "2.0.2"
+```
+
+Including
 ```bre
 include "module.bre"
+
+proto VERSION
 ```
 
 2026-08-22

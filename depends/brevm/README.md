@@ -1,13 +1,14 @@
 # BreVM
 
 > [!WARNING]
-> **BreVM está atualmente em desenvolvimento.** Funcionalidades, APIs, instruções e especificações podem sofrer alterações drásticas durante o desenvolvimento.
+> **BreVM is currently under development.** Features, APIs, instructions, and specifications may undergo significant changes during development.
 
-BreVM é uma máquina virtual baseada em registradores, seguindo a **BreVM Reference**.
+BreVM is a lightweight virtual machine based on a **hybrid execution model**, following the **[BreVMR 1](https://github.com/ipxzfoxy/brevmr)** specification.
 
-Executa bytecode Wave de forma rápida e simples. Foi projetada para ser leve e fácil
-de utilizar em aplicações C/C++ e outras linguagens.
+Its architecture combines both **register-based** and **stack-based** execution models within the same runtime. Instructions are separated according to their execution model, allowing operations to be performed using either **registers** or the **operand stack**, with consistent semantics and similar instruction naming.
 
-É utilizada principalmente pelo projeto [ProtoIndigo](https://github.com/ipxzfoxy/protoindigo).
+This hybrid architecture allows bytecode to freely use either model—or combine both—depending on the needs of the program.
 
-Aprenda a utilizar e aproveite a simplicidade e performance da **[BreVM!]()**
+BreVM executes **Wave bytecode** with a focus on simplicity, performance, and low runtime overhead. It is designed to be lightweight and easy to embed into C/C++ applications, while also allowing integration with other programming languages.
+
+BreVM is primarily used by the **[ProtoIndigo](https://github.com/ipxzfoxy/protoindigo)** project.

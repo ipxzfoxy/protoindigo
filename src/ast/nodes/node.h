@@ -6,13 +6,18 @@ namespace wave::internal {
         Identifier,
         Proto,
         Variable,
+        Jump,
         LiteralBoolean,
         LiteralString,
         LiteralNumber,
+        LiteralArray,
         AssignmentExpression,
         BinaryExpression,
-        ScopeExpression
+        ScopeExpression,
+        ParExpression,
+        IndexExpression
     };
+    
     class Node {
     protected:
         NodeType type;
@@ -22,4 +27,5 @@ namespace wave::internal {
     protected:
         Node(NodeType t) : type(t) {};
     };
+    using NodeUniquePtr = std::unique_ptr<Node>;
 } // namespace wave::internal

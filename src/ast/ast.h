@@ -2,6 +2,7 @@
 #include "nodes/proto.h"
 #include "nodes/variable.h"
 #include "nodes/identifier.h"
+#include "nodes/jump.h"
 #include "nodes/literals/string.h"
 #include "nodes/literals/number.h"
 #include "nodes/literals/boolean.h"

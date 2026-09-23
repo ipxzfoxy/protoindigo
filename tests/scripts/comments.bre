@@ -1,4 +1,6 @@
+proto "Hello, World! (with comments)";
 // include "module.bre";
 // proto "Hello, World!";
 // function print(content) { And still no functions... welp. }
+// int main()-... ops, this is ProtoIndigo.
 // ⭐🚀

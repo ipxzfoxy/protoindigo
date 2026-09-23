@@ -3,7 +3,7 @@
 
 namespace wave::internal
 {
-    std::vector<std::unique_ptr<Node>> Parser::parse_scope()
+    std::vector<std::unique_ptr<Node>> Parser::scope()
     {
         expect(TokenType::LBRACE);
         std::vector<std::unique_ptr<Node>> child_ast;

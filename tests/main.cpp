@@ -13,11 +13,18 @@ int main(int argc, char* argv[]) {
 
     std::string cmd = argv[1];
 
-    if (cmd == "run")
+    if (cmd.ends_with(".bre"))
     {
-        std::string code = wave::readBreFile(argv[2]);
+        std::string code = wave::readBreFile(argv[1]);
         wave::Operation OP = wave::create_operation();
         OP.executeString(code);
+        return 0;
+    }
+
+    if (cmd == "run")
+    {
+        wave::Operation OP = wave::create_operation();
+        OP.inputFile(argv[2], argc, argv);
         return 0;
     }
     if (cmd == "platform")
@@ -57,11 +64,18 @@ int main(int argc, char* argv[]) {
         OP.parseString(code);
         std::cout << argv[2] << " parsed." << std::endl;
         return 0;
-    } else
-    if (cmd == "help")
+    }
+    else if (cmd == "help")
     {
         wave::cli::help();
-    } else 
+    } else if (cmd == "repl")
+    {
+        std::cout << "Welcome to ProtoIndigo!" << std::endl;
+		std::cout << " type \"exit\" to exit." << std::endl;
+        wave::cli::startREPL();
+        return 0;
+    }
+    else 
     {
         wave::cli::help();
     }

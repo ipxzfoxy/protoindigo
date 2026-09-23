@@ -16,20 +16,60 @@ namespace wave
         internal::Tokenizer tokenizer(source);
         internal::Parser parser(tokenizer);
         parser.parse();
-        internal::Compiler compiler(parser.getAST());
+        internal::codegen::WaveCoder compiler(parser.getAST());
+
+        std::string space = "_BETA_STD";
+        std::string v = INDIGO_VERSION;
+
+        compiler.eject_symbol(space + "_VERSION", brevm::String(v), true);
         compiler.compile();
-        internal::VM vm(compiler.getOutput(), compiler.getCP());
-        vm.run();
+
+
+
+
+        compiler.compile();
+
+   
+
+        brevm::VM vm(compiler.getCP(), compiler.getOutput());
+
+      
+
+        vm.execute();
+
+      
         return 0;
     }
 
-    int Operation::execute(
-        internal::compiler_output bytecode,
-        internal::compiler_constant_pool constantPool
-    )
+    int Operation::inputFile(const std::string& path, int argc, char* argv[])
     {
-        internal::VM vm(bytecode, constantPool);
-        vm.run();
+        std::string source = wave::readBreFile(path);
+        internal::Tokenizer tokenizer(source);
+        internal::Parser parser(tokenizer);
+        parser.parse();
+        internal::codegen::WaveCoder compiler(parser.getAST());
+
+        std::string space = "_BETA_STD";
+        std::string v = INDIGO_VERSION;
+
+        compiler.eject_symbol(space + "_VERSION", brevm::String(v), true);
+        compiler.eject_symbol(space + "_FIRSTARG", brevm::String(argv[3]), true);
+        compiler.compile();
+
+
+
+
+        compiler.compile();
+
+   
+
+        brevm::VM vm(compiler.getCP(), compiler.getOutput());
+
+      
+
+        vm.execute();
+
+      
         return 0;
     }
 

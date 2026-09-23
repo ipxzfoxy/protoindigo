@@ -34,7 +34,6 @@ namespace wave::internal{
                 {
                     std::vector<std::unique_ptr<Node>> included = include();
                     std::vector<std::unique_ptr<Node>> newAst;
-
                     for(auto& n : included)
                         newAst.push_back(std::move(n));
                     
@@ -43,6 +42,11 @@ namespace wave::internal{
                     
                     ast = std::move(newAst);
                     return nullptr;
+                }
+                case TokenType::CTX_KW:
+                {
+                    return ctx_statement();
+                    break;
                 }
                 case TokenType::NEW:
                 {
@@ -59,6 +63,16 @@ namespace wave::internal{
                     return proto();
                     break;
                 }
+                case TokenType::GO:
+                {
+                    return go_to();
+                    break;
+                }
+                case TokenType::NUMBER:
+                {
+                    return expression();
+                    break;
+                }
                 case TokenType::IDENTIFIER:
                 {
                     const Token& nextToken = peek();
@@ -73,27 +87,30 @@ namespace wave::internal{
 
                         case TokenType::INCREMENT:
                         {
-                            return indec();
+                            return increment_decrement();
                             break;
                         }
                         case TokenType::DECREMENT:
                         {
-                            return indec();
+                            return increment_decrement();
                             break;
                         }
                         
                         default:
                         {
-                            std::cerr << "SyntaxError\nExpected a expression.";
+                            std::cerr << RED << "SyntaxError: Expected a expression." << RESET;
                             exit(1);
                             break;
+
+                            
                         }
                     }
                     break;
                 }
+
                 default:
                 {
-                    std::cerr << "SyntaxError\nUnexpected token: " << (int)current().getType() << '\n';
+                    std::cerr << RED << "SyntaxError: Unexpected token: '" << tokenTypeName(current().getType()) << '\'' << '\n' << RESET;
                     exit(1);
                     break;
                 }

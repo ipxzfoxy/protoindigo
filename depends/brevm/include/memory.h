@@ -3,26 +3,28 @@
 #include <vector>
 #include <format>
 #include <utility>
-#include "depends/brevm-spec/bytecode.h"
-#include "depends/brevm-spec/constant_pool.h"
-#include "depends/brevm-spec/runtime_value.h"
+#include "depends/brevmr/include/bytecode.hpp"
+#include "depends/brevmr/include/constant_pool.hpp"
+#include "depends/brevmr/include/runtime_value.hpp"
 #include "diagnostics/error.h"
 
 namespace brevm
 {
     class Memory 
     {
-        spec::constantPool constantPool = {};
-        std::vector<std::shared_ptr<spec::RuntimeValue>> heap = {};
+        constantPool cp = {};
+        std::vector<std::shared_ptr<RuntimeValue>> heap = {};
+        std::vector<std::shared_ptr<RuntimeValue>> slots = {};
     public:
         ~Memory() = default;
-        Memory(spec::constantPool cp) : constantPool(std::move(cp)) {};
-        
-        // METHODS
-        const std::shared_ptr<spec::RuntimeValue>& getConstant(size_t i) const;
-
-        const spec::constantPool& getCP() const { return constantPool; };
-
-        void halloc(std::shared_ptr<spec::RuntimeValue>);
+        Memory(constantPool cp) : cp(std::move(cp)) {};
+        const std::shared_ptr<RuntimeValue>& getConstant(size_t i) const;
+        const constantPool& getCP() const { return cp; };
+        void halloc(std::shared_ptr<RuntimeValue> v);
+        void store_slot(size_t index, std::shared_ptr<RuntimeValue> v);
+        std::shared_ptr<RuntimeValue> ld_slot(size_t index);
     };
 } // namespace brevm
+
+// Copyright (c) 2026 Victor Botelho Anunciação.
+// All rights reserved.

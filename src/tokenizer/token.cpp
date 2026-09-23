@@ -9,14 +9,15 @@ namespace wave::internal {
         {"false", TokenType::BOOLEAN},
         {"proto", TokenType::PROTO},
         {"include", TokenType::INCLUDE},
-        //{"return", TokenType::RETURN},
+        {"label", TokenType::CTX_KW},
+        {"go", TokenType::GO},
+        {"to", TokenType::TO},
+
     };
 
     const std::unordered_map<std::string, TokenType> operators = {
         {"++", TokenType::INCREMENT},
         {"--", TokenType::DECREMENT},
-        //{"-=", TokenType::DECREMENT},
-        //{"+=", TokenType::DECREMENT}
     };
 
     const std::unordered_map<std::string, TokenType> symbols = {
@@ -25,6 +26,8 @@ namespace wave::internal {
         {")", TokenType::RPAREN},
         {"{", TokenType::LBRACE},
         {"}", TokenType::RBRACE},
+        {"[", TokenType::LBRACKET},
+        {"]", TokenType::RBRACKET},
         {"<", TokenType::LT},
         {">", TokenType::GT},
         {":", TokenType::COLON},
