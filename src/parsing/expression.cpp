@@ -44,7 +44,6 @@ namespace wave::internal
         // Increment & Decrement
         if (auto nodeString = dynamic_cast<LiteralStringNode*>(left.get()))
         {
-            std::cout << "INDEC";
             if (peek().getType() == TokenType::INCREMENT || peek().getType() == TokenType::DECREMENT)
             {
                 left = std::move(increment_decrement());
@@ -84,7 +83,6 @@ namespace wave::internal
         consume();
 
         skipSemicolon();
-        
         return std::make_unique<AssignmentExpressionNode>(
             identifier,
             std::make_unique<BinaryExpressionNode>(
