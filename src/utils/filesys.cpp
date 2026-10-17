@@ -1,7 +1,7 @@
-#include <windows.h>
 #include "filesys.h"
 
-#ifdef defined(_WIN32) || defined(_WIN64)
+#if defined(_WIN32) || defined(_WIN64)
+	#include <windows.h>
 	std::string bre::internal::getExecutablePath() {
 		char buffer[MAX_PATH];
 		GetModuleFileNameA(NULL, buffer, MAX_PATH);
@@ -66,13 +66,4 @@
 		return {0,content};
 	}
 
-	std::string bre::internal::getExecutablePath() {
-		char buffer[MAX_PATH];
-		GetModuleFileNameA(NULL, buffer, MAX_PATH);
-
-		std::filesystem::path exepath(buffer);
-		return exepath.parent_path().string();
-	}
-
-
-// copyright (c) 2026 Victor Botelho Anunciação
+// Copyright (c) 2026 Victor Botelho Anunciação
