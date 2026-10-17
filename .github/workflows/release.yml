@@ -6,6 +6,9 @@ on:
     tags:
       - "v*"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     strategy:
@@ -79,63 +82,28 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: indigo-${{ matrix.name }}
-          path: |
-            package/*.zip
-            package/*.tar.gz
-          if-no-files-found: error
-
-  build-wasm:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Emscripten
-        uses: mymindstorm/setup-emsdk@v14
-
-      - name: Configure and Build WebAssembly
-        run: |
-          emcmake cmake -B build-wasm -DCMAKE_BUILD_TYPE=Release
-          emmake cmake --build build-wasm --config Release
-
-      - name: Package WebAssembly
-        run: |
-          mkdir -p package-wasm
-
-          cp build-wasm/indigo.js package-wasm/ 2>/dev/null || true
-          cp build-wasm/indigo.wasm package-wasm/ 2>/dev/null || true
-
-          if [ -z "$(ls -A package-wasm)" ]; then
-            echo "No WebAssembly artifacts were generated!"
-            exit 1
-          fi
-
-      - name: Upload WASM artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: indigo-wasm
-          path: package-wasm/
+          path: package/*
           if-no-files-found: error
 
   release:
-    needs: [build, build-wasm]
+    needs: build
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
 
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           path: release-assets
-          merge-multiple: false
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           name: ProtoIndigo 2.1.0-beta
+          tag_name: ${{ github.ref_name }}
+          draft: false
+          prerelease: true
+          generate_release_notes: false
+          fail_on_unmatched_files: true
           body: |
             # ProtoIndigo 2.1.0-beta
             **2026-10-17**
@@ -159,14 +127,14 @@ jobs:
             ## Fix
 
             - Fixed a CLI bug that caused `help.bre` to be searched for in an incorrect directory instead of the installation directory relative to the executable's location.
-            - Added and fixed support for resolving the scripts directory across the following platforms: **Windows, Ubuntu, and macOS**.
+            - Added and fixed support for resolving the scripts directory across **Windows, Ubuntu, and macOS**.
 
             ## Changed
 
             ### C++ API
 
             - Replaced the `indigo` namespace with `bre`.
-            - Added a new method for file input: `Operation::inputFile()`.
+            - Added `Operation::inputFile()` for file input.
             - Introduced a new standard for creating `Operation` instances and using the API.
 
             > ProtoIndigo is now compiled as a library, while the CLI continues to be compiled as an executable.
@@ -177,17 +145,8 @@ jobs:
             int main() {
                 bre::Operation O;
 
-                /**
-                 * @param path Expects a valid file path. Operation handles it automatically.
-                 * @param args A std::vector<std::string> containing arguments passed through the CLI. (OPTIONAL)
-                 */
-                O.inputFile("FILE_PATH"); // Automatically executes the script
-
-                /**
-                 * @param source The source code written in Bre.
-                 * @param args A std::vector<std::string> containing arguments passed through the CLI. (OPTIONAL)
-                 */
-                O.executeString("new #Number x = 10"); // Automatically executes the string
+                O.inputFile("FILE_PATH");
+                O.executeString("new #Number x = 10");
             }
             ```
 
@@ -195,10 +154,8 @@ jobs:
 
             ### CLI
 
-            - New command: `repl`
-              - Explicitly starts the REPL.
-            - New behavior for the `--parse file.bre` command.
-              - The `--parse <file>` command now returns only an exit code (`0`) upon success.
+            - Added the `repl` command to explicitly start the REPL.
+            - Changed `--parse <file>` to return only an exit code (`0`) upon success.
 
             ### Parsing
 
@@ -214,15 +171,11 @@ jobs:
 
             ---
 
-            ## Release
+            ## Standard Library
 
-            ### Standard Library
+            The Standard Library is now available in its early testing and development stage.
 
-            A new Standard Library is now available in its early testing and development stage!
-
-            - `std_argv`
-
-              Returns the arguments passed through the CLI. For example:
+            - `std_argv`: Returns the arguments passed through the CLI.
 
               ```bash
               indigo run main.bre hello!
@@ -233,23 +186,19 @@ jobs:
               proto std_argv3 // hello!
               ```
 
-            - `std_version`
-
-              Returns the ProtoIndigo version.
+            - `std_version`: Returns the ProtoIndigo version.
 
               ```bre
               proto std_version
               ```
 
-            - `std_vm_version`
-
-              Returns the BreVM version.
+            - `std_vm_version`: Returns the BreVM version.
 
               ```bre
               proto std_vm_version
               ```
 
-            ### Keywords
+            ## Keywords
 
             - Removed the `const` keyword.
             - Added the contextual keyword `label`.
@@ -257,110 +206,100 @@ jobs:
             - Added the `to` keyword.
             - Added the `pre` keyword.
 
-            ### ProtoIndigo
+            ## ProtoIndigo
 
-            - Added support for comments.
+            ### Comments
 
-              ```bre
-              // Hello! This is a comment. The Tokenizer ignores it.
-              ```
+            Added support for comments.
+
+            ```bre
+            // Hello! This is a comment. The Tokenizer ignores it.
+            ```
+
+            ### Increment and decrement
+
+            Added instructions for incrementing and decrementing `Number` variables and constants.
+
+            ```bre
+            new x = 10;
+            x++; // Equivalent to: x = x + 1
+            x--; // Equivalent to: x = x - 1
+            ```
+
+            > **Note:** Increment and decrement are currently instructions, not expressions. This limitation is expected to be addressed in future updates.
+
+            ### Parenthesized expressions
+
+            Added support for parenthesized expressions, which are evaluated with higher priority.
+
+            `proto` remains an instruction, not a function. For example, `proto(10, "Hello World!")` results in an error.
+
+            ```bre
+            new x = 10 - 5 + (100 / 2);
+            proto(10 / 2)
+            ```
+
+            ### Implicit multiplication
+
+            This experimental feature allows numbers followed by identifiers or parenthesized expressions to be interpreted as multiplication.
+
+            ```bre
+            new x = 10;
+            proto 2x; // Equivalent to: proto 2 * x;
+            proto 2(10 + 10); // Equivalent to: proto 2 * (10 + 10);
+            ```
+
+            ### Labels
+
+            Added the `label` instruction to mark locations in code for control-flow instructions such as `goto`.
+
+            ```bre
+            label myhome
+            ```
+
+            ### Constant declarations
+
+            Removed the `const` declaration syntax.
+
+            ```bre
+            new const x = 5;
+            ```
+
+            The `now` keyword remains available for constant declarations.
+
+            ```bre
+            now x = 5;
+            ```
+
+            ### Pre-execution directives
+
+            Added a new instruction for pre-execution directives.
+
+            ```bre
+            pre <statement>
+            ```
+
+            Script inclusion now uses `pre include`.
+
+            ```bre
+            pre include "file.bre"
+            ```
+
+            The `pre` keyword is required before `include` to specify script inclusion as a pre-execution directive.
 
             ---
-
-            - Added new instructions for incrementing and decrementing `Number` variables and constants.
-
-              ```bre
-              new x = 10;
-              x++; // Equivalent to: x = x + 1
-              x--; // Equivalent to: x = x - 1
-              ```
-
-              > **Note:** Increment and decrement are currently instructions, not expressions. This limitation is expected to be addressed in future updates.
-
-            ---
-
-            - Added support for parenthesized expressions.
-
-              Expressions enclosed in parentheses are isolated and given higher evaluation priority by the interpreter.
-
-              Do not mistake `proto` for a function just because parentheses are involved. `proto` remains an instruction, and something like `proto(10, "Hello World!")` will result in an error.
-
-              ```bre
-              new x = 10 - 5 + (100 / 2); // The expression inside the parentheses is evaluated first.
-              ```
-
-              ```bre
-              proto(10 / 2) // This is not a function call, but it is still parsed normally.
-              ```
-
-            ---
-
-            - Added implicit multiplication.
-
-              This experimental feature allows numbers followed by identifiers or parenthesized expressions `()` to be interpreted as multiplication.
-
-              ```bre
-              new x = 10;
-              proto 2x; // Equivalent to: proto 2 * x;
-              ```
-
-              ```bre
-              proto 2(10 + 10); // Equivalent to: proto 2 * (10 + 10);
-              ```
-
-            ---
-
-            - Added the `label` instruction.
-
-              Used to mark specific locations in the code, allowing instructions such as `goto` to redirect the VM's execution flow to a designated point.
-
-              ```bre
-              label myhome
-              ```
-
-            - Removed the `const` declaration syntax:
-
-              ```bre
-              new const x = 5;
-              ```
-
-              The `now` keyword remains available for constant declarations:
-
-              ```bre
-              now x = 5;
-              ```
-
-            - Added a new instruction for pre-execution directives:
-
-              ```bre
-              pre <statement>
-              ```
-
-            - Introduced a new syntax for including Bre scripts:
-
-              ```bre
-              pre include "file.bre"
-              ```
-
-              The `pre` keyword is now required before `include` to specify script inclusion as a pre-execution directive.
 
             ## Downloads
 
-            Available builds:
+            - **Windows x64:** `ProtoIndigo-2.1.0-beta-windows-x64.zip`
+            - **Linux x64:** `ProtoIndigo-2.1.0-beta-linux-x64.tar.gz`
+            - **macOS x64:** `ProtoIndigo-2.1.0-beta-macos-x64.tar.gz`
 
-            - Windows x64: `ProtoIndigo-2.1.0-beta-windows-x64.zip`
-            - Linux x64: `ProtoIndigo-2.1.0-beta-linux-x64.tar.gz`
-            - macOS x64: `ProtoIndigo-2.1.0-beta-macos-x64.tar.gz`
-            - WebAssembly: `indigo.js` / `indigo.wasm`
-
-            Desktop builds include the ProtoIndigo executable, scripts directory, and LICENSE.
+            Desktop packages include the ProtoIndigo executable, scripts directory, and LICENSE.
 
             **Note:** This is a beta release. Features and APIs may change before the stable release.
           files: |
             release-assets/indigo-linux/*
             release-assets/indigo-windows/*
             release-assets/indigo-macos/*
-            release-assets/indigo-wasm/*
-          fail_on_unmatched_files: true
-          generate_release_notes: false
 
