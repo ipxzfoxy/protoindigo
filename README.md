@@ -1,62 +1,54 @@
-# ProtoIndigo Interpreter
+# ProtoIndigo
 
+ProtoIndigo is the compiler and execution engine for the **[Bre](https://github.com/brelang)** programming language.
 
+**Bre** is being designed to provide fine-grained control, safety, flexibility, modularity, and embedding capabilities.
 
-![C++20](https://img.shields.io/badge/C%2B%2B-20-blue.svg)
-![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Wasm-lightgrey)
+Bre source code is compiled into **Wave** bytecode and executed by the [BreVM](https://github.com/ipxzfoxy/brevm) virtual machine, which is also under development.
 
+Bre features its own syntax and architecture while retaining many fundamental concepts of programming languages.
 
+It is also being designed with modern, developer-friendly embedding capabilities in mind.
 
-ProtoIndigo is a programming language compiled into bytecode and executed by its own virtual machine, [BreVM](https://github.com/ipxzfoxy/brevm).
+# Embedding
 
-Designed for executing programs with the `.bre` extension, the language uses an architecture based on modern interpretation models, featuring its own bytecode format and a dedicated runtime for its execution.
-
-The language has a lightweight and declarative syntax, maintaining familiarity with modern programming language concepts while preserving its own identity. Currently, it supports mathematical operations, variable declaration and reassignment, and data output.
-
-It is also possible to integrate ProtoIndigo into C++ applications through the embedding API currently under development.
-
-## See a .bre program!
-
-```bre
-now #String name = "xFoxyyy0"
-now #Number x = 100 + (10 * 9)
-
-proto name;
-proto 2x;
-
-```
-
-This is an incomplete example. You can see the complete syntax [here.](https://github.com/ipxzfoxy/protoindigo/tree/main/tests/scripts)
-
-## Installing
-
-[Install ProtoIndigo on your machine!](https://github.com/ipxzfoxy/protoindigo/releases)
-
-> Pre-compiled files are available for Windows, macOS, Ubuntu and WebAssembly.
-
-## Embedding
-
-Use the C++ API to create and control Operations:
+## ProtoIndigo C++ API
 
 ```cpp
 #include <indigo.h>
 
 int main() {
     bre::Operation O;
-    O.executeString("new #Number x = 10") 
+    O.executeString("new #Number x = 10");
 }
 ```
+
+# Syntax
+
+You can find all code examples **[here](https://github.com/ipxzfoxy/protoindigo/tree/main/tests/scripts)**.
+
+## Installing
+
+### Supported Platforms
+
+ProtoIndigo currently supports the following operating systems:
+
+- Windows
+- Ubuntu
+- macOS
+
+**[Download ProtoIndigo](https://github.com/ipxzfoxy/protoindigo/releases)**
 
 ## Building ProtoIndigo
 
 ### Requirements
 
-- C++20
+- C++20-compatible compiler
 - CMake
 - Ninja (recommended)
 - Make (alternative)
 
-Developed and tested using Clang + Ninja.
+Developed and tested with Clang and Ninja.
 
 ```bash
 git clone https://github.com/ipxzfoxy/protoindigo
@@ -72,23 +64,23 @@ cmake --build build
 ./indigo.exe run index.bre
 ```
 
-or if it has already been added to your PATH:
+Or, if the executable is already available in your system's `PATH`:
 
 ```bash
 indigo run index.bre
 ```
 
-* The first argument must be the path to the file you want to interpret.
+The first argument must be the path to the Bre source file you want to execute.
 
-See all available commands:
+To see all available commands, run:
 
 ```bash
 indigo help
 ```
 
-## LICENSE
+## License
 
-**[PROTOINDIGO LICENSE](https://github.com/ipxzfoxy/protoindigo/blob/main/LICENSE)**
+**[ProtoIndigo License](https://github.com/ipxzfoxy/protoindigo/blob/main/LICENSE)**
 
 ## Developer
 
