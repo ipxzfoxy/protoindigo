@@ -10,7 +10,7 @@
 namespace brevm 
 {
     using reg = std::shared_ptr<RuntimeValue>;
-    using registers = std::array<reg, 256>;
+    using Registers = std::array<reg, 256>;
 } // namespace brevm
 
 // Copyright (c) 2026 Victor Botelho Anunciação.

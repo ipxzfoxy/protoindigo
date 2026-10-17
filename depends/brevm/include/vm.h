@@ -18,7 +18,7 @@ namespace brevm
     class VM
     {
         bytecodePool bytecode;
-        registers registers;
+        Registers registers;
         operandStack stack;
         Memory memory;
         size_t ip;
