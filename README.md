@@ -18,13 +18,12 @@ It is also possible to integrate ProtoIndigo into C++ applications through the e
 ## See a .bre program!
 
 ```bre
-now name = "xFoxyyy0"
-new age = 90
+now #String name = "xFoxyyy0"
+now #Number x = 100 + (10 * 9)
 
-age = 20 + age
+proto name;
+proto 2x;
 
-proto name
-proto age
 ```
 
 This is an incomplete example. You can see the complete syntax [here.](https://github.com/ipxzfoxy/protoindigo/tree/main/tests/scripts)
