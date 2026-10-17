@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.20)
 
 project(
@@ -42,7 +41,7 @@ target_include_directories(indigo_lib
     PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/operation"
         "${CMAKE_CURRENT_SOURCE_DIR}/depends/brevm/include"
-        "${CMAKE_CURRENT_SOURCE_DIR}/depends/brevmr/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/depends/brevm/depends/brevmr/include"
 )
 
 target_link_libraries(indigo_lib
@@ -73,7 +72,7 @@ target_include_directories(indigo
         "${CMAKE_CURRENT_SOURCE_DIR}"
         "${CMAKE_CURRENT_SOURCE_DIR}/operation"
         "${CMAKE_CURRENT_SOURCE_DIR}/depends/brevm/include"
-        "${CMAKE_CURRENT_SOURCE_DIR}/depends/brevmr/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/depends/brevm/depends/brevmr/include"
 )
 
 target_link_libraries(indigo
