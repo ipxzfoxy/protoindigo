@@ -15,6 +15,11 @@ Enjoy the ProtoIndigo embedding releases! We are happy to announce the first pro
 
 *(No functions for now...)*
 
+**## Fix**
+
+- Fixed a CLI bug that caused `help.bre` to be searched for in an incorrect directory instead of the installation directory relative to the executable's location.
+- Added and fixed support for resolving the scripts directory across the following platforms: **Windows, Ubuntu, and macOS**.
+
 ## Changed
 
 ### C++ API
@@ -197,7 +202,6 @@ A new Standard Library is now available in its early testing and development sta
   ```
 
   The `pre` keyword is now required before `include` to specify script inclusion as a pre-execution directive.
-
 # ProtoIndigo 2.0.2
 New features and amazing fixes have been added. *And still no functions... welp.*
 
