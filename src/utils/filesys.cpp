@@ -29,7 +29,7 @@
 	#include <mach-o/dyld.h>
     #include <climits>
 
-	std::string getExecutablePath() {
+	std::string bre::internal::getExecutablePath() {
         char buffer[PATH_MAX];
         uint32_t size = sizeof(buffer);      
         if (_NSGetExecutablePath(buffer, &size) == 0) {
