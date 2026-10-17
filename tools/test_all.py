@@ -11,7 +11,7 @@ def dodir(path):
             continue
         print("============== RUNNING ", file, " ==============")
         result = subprocess.run(
-            ["./build/indigo.exe", file],
+            ["./build/Debug/indigo.exe", file],
             capture_output=True,
             text=True
         )
