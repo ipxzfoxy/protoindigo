@@ -1,1 +1,2 @@
-proto argv3
+proto std_argv1
+proto std_version
