@@ -6,10 +6,10 @@
 #include <unordered_map>
 #include "labeltable.h"
 #include "indigo/internal/ast/ast.h"
-#include "../../../depends/brevmr/include/bytecode.hpp"
-#include "../../../depends/brevmr/include/constant_pool.hpp"
-#include "../../../depends/brevmr/include/opcode.hpp"
-#include "../../../depends/brevmr/include/runtime_value.hpp"
+#include <bytecode.hpp>
+#include <constant_pool.hpp>
+#include <opcode.hpp>
+#include <runtime_value.hpp>
 
 namespace bre::internal::codegen {
     struct Symbol
