@@ -1,10 +1,18 @@
 
-vscode/
+# IDEs
+.vscode/
+.idea/
 vs/
+.vs/
+
 out/
 build/
 mkbre/
 mkbre.exe
 MKbre.txt
 
-.vs/
+# Devlopment and beta files
+.ignore/
+notes/
+
+

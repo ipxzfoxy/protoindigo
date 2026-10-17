@@ -1,7 +1,7 @@
 // Scope.cpp
 #include "parser.h"
 
-namespace wave::internal
+namespace bre::internal
 {
     std::vector<std::unique_ptr<Node>> Parser::scope()
     {

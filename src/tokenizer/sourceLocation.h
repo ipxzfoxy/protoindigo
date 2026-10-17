@@ -1,4 +1,4 @@
-namespace wave::internal
+namespace bre::internal
 {
     struct SourceLocation
     {

@@ -1,4 +1,4 @@
-include "tests/scripts/module.bre"
+pre include "tests/scripts/module.bre"
 
 proto x
 

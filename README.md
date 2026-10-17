@@ -1,6 +1,13 @@
 # ProtoIndigo Interpreter
 
-ProtoIndigo is a programming language compiled into bytecode and executed by its own virtual machine, BreVM.
+
+
+![C++20](https://img.shields.io/badge/C%2B%2B-20-blue.svg)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Wasm-lightgrey)
+
+
+
+ProtoIndigo is a programming language compiled into bytecode and executed by its own virtual machine, [BreVM](https://github.com/ipxzfoxy/brevm).
 
 Designed for executing programs with the `.bre` extension, the language uses an architecture based on modern interpretation models, featuring its own bytecode format and a dedicated runtime for its execution.
 
@@ -30,17 +37,14 @@ This is an incomplete example. You can see the complete syntax [here.](https://g
 
 ## Embedding
 
-Use the C++ API to create and control  Operations:
+Use the C++ API to create and control Operations:
 
 ```cpp
-#include "operation/w_operation.h"
+#include <indigo.h>
 
-int main()
-{
-    std::string code = wave::readBreFile(argv[2]);
-    wave::Operation OP = wave::create_operation();
-    OP.executeString(code);
-    return 0;
+int main() {
+    bre::Operation O;
+    O.executeString("new #Number x = 10") 
 }
 ```
 
@@ -84,6 +88,7 @@ indigo help
 ```
 
 ## LICENSE
+
 **[PROTOINDIGO LICENSE](https://github.com/ipxzfoxy/protoindigo/blob/main/LICENSE)**
 
 ## Developer

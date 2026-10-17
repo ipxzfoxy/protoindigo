@@ -1,6 +1,6 @@
 #include "parser.h"
 
-namespace wave::internal
+namespace bre::internal
 {
     // Para keywords e statements que dependem de contexto.
     std::unique_ptr<Node> Parser::ctx_statement()

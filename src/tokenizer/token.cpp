@@ -1,10 +1,9 @@
 #include "token.h"
 
-namespace wave::internal {
+namespace bre::internal {
     const std::unordered_map<std::string, TokenType> keywords = {
         {"new", TokenType::NEW},
         {"now", TokenType::NOW},
-        {"const", TokenType::CONST},
         {"true", TokenType::BOOLEAN},
         {"false", TokenType::BOOLEAN},
         {"proto", TokenType::PROTO},
@@ -12,6 +11,7 @@ namespace wave::internal {
         {"label", TokenType::CTX_KW},
         {"go", TokenType::GO},
         {"to", TokenType::TO},
+        {"pre", TokenType::PRE},
 
     };
 

@@ -5,7 +5,7 @@
 
 #include "parser.h"
 
-namespace wave::internal{
+namespace bre::internal{
 
     // ============== PUBLIC ==============
 
@@ -30,18 +30,28 @@ namespace wave::internal{
     {
         switch (current().getType())
             {
+                case TokenType::PRE:
+                {
+                    consume();
+
+                    if (current().getType() == TokenType::INCLUDE) {
+                        std::vector<std::unique_ptr<Node>> included = include();
+                        std::vector<std::unique_ptr<Node>> newAst;
+                        for(auto& n : included)
+                            newAst.push_back(std::move(n));
+                        
+                        for(auto& n : ast)
+                            newAst.push_back(std::move(n));
+                        
+                        ast = std::move(newAst);
+                        return nullptr;
+                    }
+                }
                 case TokenType::INCLUDE:
                 {
-                    std::vector<std::unique_ptr<Node>> included = include();
-                    std::vector<std::unique_ptr<Node>> newAst;
-                    for(auto& n : included)
-                        newAst.push_back(std::move(n));
-                    
-                    for(auto& n : ast)
-                        newAst.push_back(std::move(n));
-                    
-                    ast = std::move(newAst);
-                    return nullptr;
+                    std::cerr << RED << "SyntaxError: Include needs set marked by pre instruction." << RESET;
+                            exit(1);
+                            break;
                 }
                 case TokenType::CTX_KW:
                 {

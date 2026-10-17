@@ -6,7 +6,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace wave::internal::codegen
+namespace bre::internal::codegen
 {
     class LabelTable
     {

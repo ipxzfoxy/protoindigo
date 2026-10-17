@@ -2,7 +2,7 @@
 #include <string>
 #include "token.h"
 
-namespace wave::internal {
+namespace bre::internal {
 	std::string tokenTypeName(TokenType t);
 } // namespace wave::internal
 

@@ -1,14 +1,13 @@
 
 #include "tokenTypeName.h"
 
-namespace wave::internal {
+namespace bre::internal {
 	std::string tokenTypeName(TokenType t)
     {
     switch (t)
     {
         case TokenType::NEW: return "new";
         case TokenType::NOW: return "now";
-        case TokenType::CONST: return "const";
         case TokenType::PROTO: return "proto";
         case TokenType::AS: return "as";
         case TokenType::INCLUDE: return "include";

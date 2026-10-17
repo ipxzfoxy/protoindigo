@@ -10,7 +10,7 @@
 #include <vector>
 #include "token.h"
 
-namespace wave::internal {
+namespace bre::internal {
     class Tokenizer {
     private:
         std::string source;

@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 
-namespace wave::internal::codegen
+namespace bre::internal::codegen
 {
     size_t LabelTable::exists(std::string& name)
     {

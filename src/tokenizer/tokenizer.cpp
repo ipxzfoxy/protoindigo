@@ -9,7 +9,7 @@
 
 #include "tokenizer.h"
 
-namespace wave::internal {
+namespace bre::internal {
     
     // ============== PUBLIC ==============
 

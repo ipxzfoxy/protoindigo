@@ -15,28 +15,29 @@
 #include <format>
 #include <utility>
 #include <stdexcept>
+#include <filesystem>
 
-#include "../../utils/readBreFile.h"
+#include "../utils/filesys.h"
 
-#include "../ast/nodes/node.h"
-#include "../ast/nodes/proto.h"
-#include "../ast/nodes/variable.h"
-#include "../ast/nodes/identifier.h"
-#include "../ast/nodes/jump.h"
+#include "indigo/internal/ast/nodes/node.h"
+#include "indigo/internal/ast/nodes/proto.h"
+#include "indigo/internal/ast/nodes/variable.h"
+#include "indigo/internal/ast/nodes/identifier.h"
+#include "indigo/internal/ast/nodes/jump.h"
 
-#include "../ast/nodes/literals/string.h"
-#include "../ast/nodes/literals/number.h"
-#include "../ast/nodes/literals/boolean.h"
-#include "../ast/nodes/literals/array.h"
+#include "indigo/internal/ast/nodes/literals/string.h"
+#include "indigo/internal/ast/nodes/literals/number.h"
+#include "indigo/internal/ast/nodes/literals/boolean.h"
+#include "indigo/internal/ast/nodes/literals/array.h"
 
-#include "../ast/nodes/expression/assignment.h"
-#include "../ast/nodes/expression/binary.h"
-#include "../ast/nodes/expression/parenthesized.h"
+#include "indigo/internal/ast/nodes/expression/assignment.h"
+#include "indigo/internal/ast/nodes/expression/binary.h"
+#include "indigo/internal/ast/nodes/expression/parenthesized.h"
 
 #include "../tokenizer/tokenizer.h"
 #include "../tokenizer/tokenTypeName.h"
 
-namespace wave::internal
+namespace bre::internal
 {   
     using PV = std::variant<std::string, double, bool>;
     class Parser {
@@ -96,6 +97,6 @@ namespace wave::internal
         std::vector<std::unique_ptr<Node>> include();
         std::vector<std::unique_ptr<Node>> scope();
     };
-} // namespace wave::internal
+} // namespace bre::internal
 
 // copyright (c) 2026 Victor Botelho Anunciação

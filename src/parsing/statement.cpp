@@ -1,6 +1,6 @@
 #include "parser.h"
 
-namespace wave::internal
+namespace bre::internal
 {
     // Variables & Functions
     std::unique_ptr<Node> Parser::variable()
@@ -15,24 +15,8 @@ namespace wave::internal
             constant = true;
             consume();
 
-            if (current().getType() == TokenType::CONST)
-            {
-                std::cerr << std::format(
-                    "SyntaxError\ninconsistent constant declaration using `{} >{}<`.\n"
-                    "Did you mean `now x = value` or `new const x = value`?\n",
-                    "now",
-                    "const"
-                );
-                exit(1);
-            }
         } else {
             expect(TokenType::NEW);
-        }
-
-        if (current().getType() == TokenType::CONST)
-        {
-            constant = true;
-            consume();
         }
 
         if (current().getType() == TokenType::TYPING)
@@ -93,7 +77,17 @@ namespace wave::internal
         expect(TokenType::INCLUDE);
         std::string target = std::get<std::string>(current().getValue());
         expect(TokenType::LITERAL_STRING);
-        Tokenizer tkz(readBreFile(target));
+        auto [ e, s ] = readFile(target);
+
+        std::filesystem::path filePath = std::filesystem::current_path() / target;
+        if (e == 1)
+        {
+            throw std::runtime_error(std::format("[CompileError] Include: Module not found:\n{}", filePath.string()));
+        } else if (e == 2) {
+            throw std::runtime_error(std::format("[CompileError] Include: Error to read module.\n{}", filePath.string()));
+        }
+
+        Tokenizer tkz(s);
         Parser parser(tkz);
         parser.parse();
 

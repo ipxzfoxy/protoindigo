@@ -4,73 +4,67 @@
 */ 
 #include "w_operation.h"
 
-namespace wave
+namespace bre
 {
     Operation create_operation()
     {
         return Operation();
     }
 
-    int Operation::executeString(const std::string& source)
+    int Operation::executeString(const std::string& source, std::vector<std::string> args)
     {
         internal::Tokenizer tokenizer(source);
+
         internal::Parser parser(tokenizer);
         parser.parse();
-        internal::codegen::WaveCoder compiler(parser.getAST());
 
-        std::string space = "_BETA_STD";
-        std::string v = INDIGO_VERSION;
+        internal::codegen::WaveCoder WC(parser.getAST());
 
-        compiler.eject_symbol(space + "_VERSION", brevm::String(v), true);
-        compiler.compile();
+        internal::brestdlib::installArgs(WC, args);
 
+        WC.compile();
 
+        brevm::VM engine(WC.getCP(), WC.getOutput());
+        engine.execute();
 
-
-        compiler.compile();
-
-   
-
-        brevm::VM vm(compiler.getCP(), compiler.getOutput());
-
-      
-
-        vm.execute();
-
-      
         return 0;
     }
 
-    int Operation::inputFile(const std::string& path, int argc, char* argv[])
+    int Operation::executeString(const std::string& source)
     {
-        std::string source = wave::readBreFile(path);
-        internal::Tokenizer tokenizer(source);
+        return executeString(source, {});
+    }
+
+
+    int Operation::inputFile(const std::string& path, std::vector<std::string> args)
+    {
+        std::filesystem::path filePath = std::filesystem::current_path() / path;
+        auto [e, s] = bre::internal::readFile(path);
+        if (e == 1)
+        {
+            throw std::runtime_error(std::format("[InitError] Module not found:\n{}", filePath.string()));
+        } else if (e == 2) {
+             throw std::runtime_error(std::format("[InitError] Error to read module.\n{}", filePath.string()));
+        }
+
+        internal::Tokenizer tokenizer(s);
+        
         internal::Parser parser(tokenizer);
         parser.parse();
-        internal::codegen::WaveCoder compiler(parser.getAST());
+        internal::codegen::WaveCoder WC(parser.getAST());
 
-        std::string space = "_BETA_STD";
-        std::string v = INDIGO_VERSION;
+        internal::brestdlib::installArgs(WC, args);
+        WC.compile();
 
-        compiler.eject_symbol(space + "_VERSION", brevm::String(v), true);
-        compiler.eject_symbol(space + "_FIRSTARG", brevm::String(argv[3]), true);
-        compiler.compile();
+        brevm::VM engine(WC.getCP(), WC.getOutput());
+        engine.execute();
 
-
-
-
-        compiler.compile();
-
-   
-
-        brevm::VM vm(compiler.getCP(), compiler.getOutput());
-
-      
-
-        vm.execute();
-
-      
         return 0;
+    }
+
+    int Operation::inputFile(const std::string& path)
+    {
+        return inputFile(path, {});
     }
 
     std::vector<internal::Token> Operation::tokenizeString(const std::string& source)

@@ -7,23 +7,26 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "cli/cmds.h"
-#include "utils/readBreFile.h"
+#include <filesystem>
+#include "src/utils/filesys.h"
 #include "src/tokenizer/tokenizer.h"
 #include "src/parsing/parser.h"
+#include "src/lib/std.h"
 
 #include "src/codegen/wave/compiler.h"
 #include "depends/brevm/include/vm.h"
 #include "depends/brevmr/include/runtime_value.hpp"
 
-namespace wave {
+namespace bre {
 
 class Operation {
 public:
     Operation() {};
 
     int executeString(const std::string& source);
-    int Operation::inputFile(const std::string& path, int argc, char* argv[]);
+    int executeString(const std::string& source, std::vector<std::string> args);
+    int inputFile(const std::string& path);
+    int inputFile(const std::string& path, std::vector<std::string> args);
     std::vector<internal::Token> tokenizeString(const std::string& source);
     std::vector<std::unique_ptr<internal::Node>> parseString(const std::string& source);
 };

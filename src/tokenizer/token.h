@@ -5,13 +5,13 @@
 #include <string_view>
 #include <variant>
 
-namespace wave::internal {
+namespace bre::internal {
     enum class TokenType : uint8_t {
         NEW,
         NOW,
-        CONST,
         PROTO,
         AS,
+        PRE,
         INCLUDE,
         IDENTIFIER,
         T_EOF,

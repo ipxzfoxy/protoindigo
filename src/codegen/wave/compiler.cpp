@@ -4,7 +4,7 @@
 
 #include "compiler.h"
 
-namespace wave::internal::codegen {
+namespace bre::internal::codegen {
     // ======================== PUBLIC ========================
     WaveCoder::WaveCoder(std::vector<std::unique_ptr<Node>> nodes)
         : label_table()

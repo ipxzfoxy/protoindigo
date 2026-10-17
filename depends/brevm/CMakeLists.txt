@@ -13,8 +13,13 @@ file(GLOB_RECURSE BREVM_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 )
 
+
 add_library(brevm_lib STATIC
     ${BREVM_SOURCES}
+)
+
+target_compile_definitions(brevm_lib PUBLIC
+        BREVM_VERSION="${PROJECT_VERSION}"
 )
 
 target_include_directories(brevm_lib PUBLIC

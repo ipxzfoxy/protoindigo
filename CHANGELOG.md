@@ -1,156 +1,202 @@
-# ProtoIndigo 2.1.0
-**Structural reorganization** for improved **code maintainability**, along with a few **additional utilities**.
+# 2.1.0-beta
+**2026-10-17**
 
-## Mudanças internas específicas
-- BreVM desaclopada do repositório protoindigo, transferindo-se para seu próprio repositório.
-- compiler/ renomeado apra codegen/
-- orquetrador de codegen renomeado de Compiler para WaveCoder
-- Parser reorganized and split into multiple files.
-- Codegen reformulado para seguir a BreVMR 1
-- Mudanças no Tokenizer
-- Novos tokens: `CTX_KW`, `GO`, `TO`
+> ⚠️ **Beta Release:** Unstable and incomplete build for testing.
 
-## Relevante
-- Diversas mudanças no compilador
-- Adicionado suporte para BreVM v0.0.2
-- Adicionado suporte para BreVMR 1
-- Tokenizer aprimorado
-* CLI atualizada: Agora é possível executar arquivos `.bre` diretamente pela linha de comando, sem a necessidade de utilizar explicitamente o comando `run`.
+This update focuses entirely on innovation, restructuring, and adaptation. **BreVM is now an independent project.**
 
-  Por exemplo, em vez de:
+ProtoIndigo continues to use BreVM's stack-based architecture, despite the hybrid architecture that also incorporates registers.
 
-  `indigo run file.bre`
+This update introduces several **new features**, including support for **mathematical expressions**. It also brings minor **optimizations**, **error standardization**, and new **toolchains** to ensure the best possible experience.
 
-  agora também é possível utilizar:
+Enjoy the ProtoIndigo embedding releases! We are happy to announce the first prototype of the ProtoIndigo Standard Library.
 
-  `indigo file.bre`
+**Have a great October! 🎃**
 
-  O uso de `indigo run file.bre` continua sendo recomendado por deixar a intenção do comando explícita. Além disso, o comando `run` é obrigatório para executar arquivos que não possuem a extensão `.bre`.
+*(No functions for now...)*
 
-- New increment and decrement instructions
-> Instruções para incrementar ou decrementar um dígito a uma variável do tipo number.
+## Changed
 
-```bre
-new x = 10;
-x++ // Equivalente a x = x + 1;
-x-- // Equivalente a x = x - 1;
+### C++ API
+
+- Replaced the `indigo` namespace with `bre`.
+- Added a new method for file input: `Operation::inputFile()`.
+- Introduced a new standard for creating `Operation` instances and using the API.
+
+> ProtoIndigo is now compiled as a library, while the CLI continues to be compiled as an executable.
+
+```cpp
+#include <indigo.h>
+
+int main() {
+    bre::Operation O;
+
+    /**
+     * @param path Expects a valid file path. Operation handles it automatically.
+     * @param args A std::vector<std::string> containing arguments passed through the CLI. (OPTIONAL)
+     */
+    O.inputFile("FILE_PATH"); // Automatically executes the script
+
+    /**
+     * @param source The source code written in Bre.
+     * @param args A std::vector<std::string> containing arguments passed through the CLI. (OPTIONAL)
+     */
+    O.executeString("new #Number x = 10"); // Automatically executes the string
+}
 ```
 
-- Added support for comments
-> Comentários são ignorados pelo parser e não chegam na fase de code generation.
+> The `.pushSymbol()` method is planned for implementation in the stable release.
 
-```bre
-proto "Hello, World!";
+### CLI
 
-// And still no functions... welp.
-```
+- New command: `repl`
+  > Explicitly starts the REPL.
+- New behavior for the `--parse file.bre` command.
+  > The `--parse <file>` command now returns only an exit code (`0`) upon success.
 
-- Diagnósticos melhorados e padronizados. de:
+### Parsing
 
-```bash
-SyntaxError
-Expected 11 but: 7
-```
+- Improved, cleaned up, and reorganized the parser.
+- Added parsing support for new expressions.
 
-para
+### Codegen
 
-```bash
-SyntaxError: Expected ')' but: <end_of_file>
-```
+- Added support for BreVM 0.0.2.
+- Added support for BreVMR 1.
+- Added support for new instructions and expressions.
+- Added support for `RuntimeValue` types.
 
-- Adicionado suporte para expressões dentro de parênteses:
+---
 
-```bre
-new x = 10 + (10 / 2) // Retornando 15, com a expressão dentro dos parênteses send resolvida com prioridade.
-```
+## Release
 
-- Adicionada Multiplicação implícita
+### Standard Library
 
-```bre
-new x = 10;
+A new Standard Library is now available in its early testing and development stage!
 
-proto 2x
-```
+- `std_argv`
 
-retorna `20`, que é equivalente a:
+  > Returns the arguments passed through the CLI. For example:
 
-```bre
-new x = 10;
+  ```bash
+  indigo run main.bre hello!
+  ```
 
-proto 2 * x
-```
+  ```bre
+  proto std_argv0 // indigo
+  proto std_argv3 // hello!
+  ```
 
-E também com parenteses:
+- `std_version`
 
-```bre
-proto 2(10 / 2)
-```
+  > Returns the ProtoIndigo version.
 
-retorna `25`, que é equivalente a:
+  ```bre
+  proto std_version
+  ```
 
-```bre
-proto 2 * (10 / 2)
-```
+- `std_vm_version`
 
-- Nova instrução: label
-> Utilizada para marcar pontos específicos no código. permitindo que instruções como goto desviem o fluxo de execução da VM para determinado ponto.
+  > Returns the BreVM version.
 
-```bre
-label home // label <IDENTIFIER>
-```
+  ```bre
+  proto std_vm_version
+  ```
 
-- Nova instrução: go/to
-> A instrução go/to desvia o fluxo de execução para um determinado ponto, marcado por um label.
+### Keywords
 
-```bre
-label home
+- Removed the `const` keyword.
+- Added the contextual keyword `label`.
+- Added the `go` keyword.
+- Added the `to` keyword.
+- Added the `pre` keyword.
 
-proto "Hello, World!"
+### ProtoIndigo
 
-go to home
-```
+- Added support for comments.
 
-*Que a partir do ponto marcado por `home`, o compilador irá ejetar o opcode `JMP` para voltar ou avançar a partir do ponto marcado pelo label.*
+  ```bre
+  // Hello! This is a comment. The Tokenizer ignores it.
+  ```
 
-- go/to com contatores
-> Define um limite de quantas vezes tal go/to pode ser executado.
+---
 
-Que nesse caso, o pulo até home só poderia ser feito 2 vezes.
+- Added new instructions for incrementing and decrementing `Number` variables and constants.
 
-```bre
-label home
+  ```bre
+  new x = 10;
+  x++; // Equivalent to: x = x + 1
+  x--; // Equivalent to: x = x - 1
+  ```
 
-proto "Hello, World!"
+  > **Note:** Increment and decrement are currently instructions, not expressions. This limitation is expected to be addressed in future updates.
 
-go 2 to home
-```
+---
 
-- go/to explícitos
-> Um forma de redirecionar a execução usando go/to com números no lugar de labels.
+- Added support for parenthesized expressions.
 
-```
-go to 1
-```
+  > Expressions enclosed in parentheses are isolated and given higher evaluation priority by the interpreter.
 
-- label proto
-> Labels podem ser jogados na saída. que retornam um size_t indicando o ponto que o label aponta.
+  > Do not mistake `proto` for a function just because parentheses are involved. `proto` remains an instruction, and something like `proto(10, "Hello World!")` will result in an error.
 
-# Mudanças completas
+  ```bre
+  new x = 10 - 5 + (100 / 2); // The expression inside the parentheses is evaluated first.
+  ```
 
-- BreVM desaclopada do repositório protoindigo, transferindo-se para seu próprio repositório.
-- compiler/ renomeado apra codegen/
-- Diversas mudaças no compilador
-- Codegen reformulado para seguir a BreVMR 1
-- Adicionado suporte para BreVM v0.0.2
-- Parser reorganized and split into multiple files.
-- Tokenizer aprimorado
-- New increment and decrement instructions
-- Added support for comments
-- Diagnósticos melhorados e padronizados.
-- Adicionado suporte para expressões dentro de parênteses.
-- Adicionada Multiplicação implícita.
+  ```bre
+  proto(10 / 2) // This is not a function call, but it is still parsed normally.
+  ```
 
-*2026-09-02*
+---
+
+- Added implicit multiplication.
+
+  > This feature, which is still experimental, allows numbers followed by identifiers or parenthesized expressions `()` to be interpreted as multiplication.
+
+  ```bre
+  new x = 10;
+  proto 2x; // Equivalent to: proto 2 * x;
+  ```
+
+  ```bre
+  proto 2(10 + 10); // Equivalent to: proto 2 * (10 + 10);
+  ```
+
+---
+
+- Added the `label` instruction.
+
+  > Used to mark specific locations in the code, allowing instructions such as `goto` to redirect the VM's execution flow to a designated point.
+
+  ```bre
+  label myhome
+  ```
+
+- Removed the `const` declaration syntax:
+
+  ```bre
+  new const x = 5;
+  ```
+
+  The `now` keyword remains available for constant declarations:
+
+  ```bre
+  now x = 5;
+  ```
+
+- Added a new instruction for pre-execution directives:
+
+  ```bre
+  pre <statement>
+  ```
+
+- Introduced a new syntax for including Bre scripts:
+
+  ```bre
+  pre include "file.bre"
+  ```
+
+  The `pre` keyword is now required before `include` to specify script inclusion as a pre-execution directive.
 
 # ProtoIndigo 2.0.2
 New features and amazing fixes have been added. *And still no functions... welp.*

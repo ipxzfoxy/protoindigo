@@ -1,6 +1,6 @@
 #include "parser.h"
 
-namespace wave::internal
+namespace bre::internal
 {
     // * & /
     std::unique_ptr<Node> Parser::factor()
