@@ -116,6 +116,17 @@ namespace bre::cli
         }
 
 
+        // =========== Help ===========
+        if (args[1] == "-v") {
+            version();
+            return 0;
+        }
+
+        if (args[1] == "platform") {
+            version();
+            return 0;
+        }
+
         help();
         return 0;
 
